@@ -11,34 +11,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint en formatting
+  branch-name:
+    name: Branchnaam
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
-      - run: uv run ruff check .
-      - run: uv run ruff format --check .
-
-  test:
-    name: Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
-      - name: Draai de tests als die er zijn
+      - name: Controleer de branchnaam
+        env:
+          BRANCH: ${{ github.head_ref }}
         run: |
-          if [ -d tests ]; then
-            uv run pytest
-          else
-            echo "Nog geen tests"
+          if [[ ! "$BRANCH" =~ ^(breaking|feature|fix)/.+ && ! "$BRANCH" =~ ^dependabot/.+ ]]; then
+            echo "De branchnaam '$BRANCH' moet beginnen met breaking/, feature/ of fix/ (de release-pipeline bepaalt hieruit de versie)." >&2
+            exit 1
           fi
+          case "$BRANCH" in
+            breaking/*) echo "Deze PR geeft een major-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+            feature/*) echo "Deze PR geeft een minor-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+            *) echo "Deze PR geeft een patch-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+          esac
 
-  build:
-    name: Bouwen en valideren
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: athombv/github-action-homey-app-validate@v1
-        with:
-          level: publish
+  checks:
+    name: Controles
+    uses: ./.github/workflows/checks.yml
+    permissions:
+      contents: read
+      pull-requests: write

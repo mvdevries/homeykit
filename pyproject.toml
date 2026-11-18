@@ -12,6 +12,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff>=0.14.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.0.0",
+    "pytest-playwright>=0.7.0",
 ]
 
 [tool.uv]
@@ -42,6 +46,9 @@ select = [
 ]
 ignore = ["PLR2004"]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR0911", "PLR0913", "ASYNC109", "PLR0915"]
+
 [tool.ruff.lint.pylint]
 max-args = 7
 max-returns = 5
@@ -52,3 +59,29 @@ max-statements = 25
 quote-style = "double"
 indent-style = "space"
 line-ending = "lf"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: tests with the real HomeKit bridge on loopback",
+    "e2e: browser tests of the settings pages",
+]
+
+[tool.coverage.run]
+source = ["."]
+branch = true
+omit = [
+    "tests/*",
+    "python_packages/*",
+    ".venv/*",
+    ".homeybuild/*",
+    ".python_cache/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+skip_empty = true

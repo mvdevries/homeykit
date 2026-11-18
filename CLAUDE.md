@@ -6,7 +6,7 @@ structuur en de commando's.
 ## Afspraken
 
 - **Code is Engels**: namen van variabelen, functies, klassen, bestanden, CSS-klassen, instellingssleutels
-  en logregels. Commit-berichten, PR-teksten en docs (`README.md`, deze file) zijn Nederlands. Teksten
+  en logregels. Commit-berichten, PR-teksten en deze file zijn Nederlands; `README.md` is Engels. Teksten
   voor de gebruiker staan in `locales/nl.json` en `locales/en.json`, nooit hardcoded in `settings/`.
 - **Geen commentaar of docstrings in code.** Alleen Martyn schrijft commentaar. Laat de code zichzelf
   uitleggen met kleine functies en uitgebreide namen: liever te veel dan te weinig.
@@ -17,6 +17,10 @@ structuur en de commando's.
 - Draai de app alleen op de Homey als Martyn dat vraagt. De app start en stop je als achtergrondtaak
   met `npx homey app run --remote`, en na elke codewijziging herstart je hem. Geen Rex-panelen.
 - Het uploaden en publiceren van een build doe je alleen op uitdrukkelijk verzoek.
+- Branchnamen beginnen met `breaking/`, `feature/` of `fix/`: de release-pipeline bepaalt hieruit de versie
+  (major, minor, patch). Merge met een merge commit, niet met squash.
+- Tests staan in `tests/unit`, `tests/integration` en `tests/e2e` (pytest, coverage minimaal 90%). Testapparaten zijn
+  generiek (`tests/support/sample_devices.py`); zet er nooit echte apparaten, namen of adressen in.
 - Formatteer en lint met `uv run ruff format .` en `uv run ruff check .`; de pipeline faalt anders.
 
 ## Structuur
