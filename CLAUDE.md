@@ -20,8 +20,8 @@ structuur en de commando's.
 
 ## Structuur
 
-Lagen, van onder naar boven: `config` en `domain`, `storage`, `gateways` en `homekit`, `services`,
-`routes`, en daarboven `app.py` en `api.py`. Een laag gebruikt alleen lagen onder zich. Services staan in
+Lagen, van onder naar boven: `config` en `domain`, `repositories`, `gateways` en `homekit`, `services`,
+`endpoints`, en daarboven `app.py` en `api.py`. Een laag gebruikt alleen lagen onder zich. Services staan in
 `services/`, één klasse per bestand, en worden samengesteld in `services/service_container.py`.
 
 ## Dingen die je moet weten
@@ -49,5 +49,5 @@ Lagen, van onder naar boven: `config` en `domain`, `storage`, `gateways` en `hom
   IPv4-adres en adverteerde alleen Thread-adressen.
 - `homey app publish` is interactief; met `HOMEY_HEADLESS=1` is het dat niet (zie `README.md`).
 - Oude instellingssleutels (`aangeboden`, `aids`, `bridge_naam`, `start_vertraging_aan`, `start_vertraging_seconden`)
-  worden bij het opstarten door `storage/legacy_settings_migration.py` overgenomen naar de Engelse sleutels en
+  worden bij het opstarten door `repositories/legacy_settings_migration.py` overgenomen naar de Engelse sleutels en
   daarna verwijderd. Een bestaande nieuwe waarde wordt nooit overschreven.

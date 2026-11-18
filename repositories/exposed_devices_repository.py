@@ -4,7 +4,7 @@ from ..config.setting_keys import EXPOSED_DEVICE_IDS_SETTING_KEY
 from .settings_storage import JsonSettingsAccess
 
 
-class ExposedDevicesStore:
+class ExposedDevicesRepository:
     def __init__(self, settings_access: JsonSettingsAccess) -> None:
         self._settings_access = settings_access
 

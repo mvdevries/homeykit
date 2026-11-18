@@ -1,6 +1,6 @@
-from .routes.device_routes import get_devices, get_icons, set_exposed_devices
-from .routes.pairing_routes import get_pairing
-from .routes.settings_routes import (
+from .endpoints.device_endpoints import get_devices, get_icons, set_exposed_devices
+from .endpoints.pairing_endpoints import get_pairing
+from .endpoints.settings_endpoints import (
     get_settings,
     set_bridge_name,
     set_pincode,

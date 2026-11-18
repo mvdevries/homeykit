@@ -2,18 +2,18 @@ from ..config.bridge_defaults import BRIDGE_DEFAULT_NAME
 from ..domain.bridge_name import normalize_bridge_name
 from ..domain.log_function import LogFunction
 from ..gateways.homey_devices_gateway import HomeyDevicesGateway
-from ..storage.bridge_name_store import BridgeNameStore
+from ..repositories.bridge_name_repository import BridgeNameRepository
 
 
 class BridgeNameService:
     def __init__(
         self,
         *,
-        bridge_name_store: BridgeNameStore,
+        bridge_name_repository: BridgeNameRepository,
         devices_gateway: HomeyDevicesGateway,
         log: LogFunction,
     ) -> None:
-        self._bridge_name_store = bridge_name_store
+        self._bridge_name_repository = bridge_name_repository
         self._devices_gateway = devices_gateway
         self._log = log
         self._default_bridge_name = BRIDGE_DEFAULT_NAME
@@ -32,7 +32,7 @@ class BridgeNameService:
             self._default_bridge_name = homey_name
 
     def read_custom_bridge_name(self) -> str | None:
-        return self._bridge_name_store.read_custom_name()
+        return self._bridge_name_repository.read_custom_name()
 
     def resolve_bridge_name(self) -> str:
         return self.read_custom_bridge_name() or self._default_bridge_name
@@ -40,6 +40,6 @@ class BridgeNameService:
     async def set_custom_bridge_name(self, text: str | None) -> None:
         normalized_name = normalize_bridge_name(text)
         if normalized_name is None:
-            await self._bridge_name_store.clear_custom_name()
+            await self._bridge_name_repository.clear_custom_name()
         else:
-            await self._bridge_name_store.save_custom_name(normalized_name)
+            await self._bridge_name_repository.save_custom_name(normalized_name)

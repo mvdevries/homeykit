@@ -2,7 +2,7 @@ from ..config.setting_keys import BRIDGE_NAME_SETTING_KEY
 from .settings_storage import SettingsStorage
 
 
-class BridgeNameStore:
+class BridgeNameRepository:
     def __init__(self, storage: SettingsStorage) -> None:
         self._storage = storage
 

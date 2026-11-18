@@ -18,7 +18,7 @@ De code staat in lagen. Een laag gebruikt alleen lagen die onder hem staan.
 
 ```
 app.py                  App: bouwt de services en start en stopt de bridge
-api.py                  Routes van de app-API, geëxporteerd voor Homey
+api.py                  Endpoints van de app-API, geëxporteerd voor Homey
 config/                 Vaste waarden: poorten, standaardnamen, instellingssleutels
 domain/                 Gegevensmodellen en regels zonder I/O
   homey_device.py         Homey-apparaat en capabilities
@@ -26,7 +26,7 @@ domain/                 Gegevensmodellen en regels zonder I/O
   pincode.py              Regels en generatie van de pincode
   bridge_name.py          Regels voor de naam van de bridge
   startup_delay.py        De opstartvertraging en de grenzen ervan
-storage/                Lezen en schrijven van de Homey-instellingen
+repositories/           Lezen en schrijven van de Homey-instellingen
   legacy_settings_migration.py  Neemt instellingen van de oude (Nederlandse) sleutels over
 gateways/               Praten met de Homey Web API
   homey_web_api.py        HTTP-client met token
@@ -50,7 +50,7 @@ services/               De logica: één klasse per bestand
   pairing_service.py      Gegevens om te koppelen: QR-code, pincode, status
   pincode_service.py      De willekeurige of zelfgekozen pincode
   service_container.py    Stelt alle services samen
-routes/                 Dunne routes die de services aanroepen
+endpoints/              Dunne endpoints die de services aanroepen
 settings/               Instellingenpagina (HTML, css/ en js/ per onderdeel)
 locales/                Vertalingen (en.json, nl.json)
 assets/                 Icoon en winkelafbeeldingen
