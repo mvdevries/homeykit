@@ -91,5 +91,10 @@
     "base36",
     "segno",
     "httpx"
-  ]
+  ],
+  "homepage": "https://github.com/mvdevries/homeykit",
+  "source": "https://github.com/mvdevries/homeykit",
+  "bugs": {
+    "url": "https://github.com/mvdevries/homeykit/issues"
+  }
 }

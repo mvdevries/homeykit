@@ -25,4 +25,9 @@ Goed om te weten
 - De Woning-app biedt alleen koppelen aan als de bridge nog niet gekoppeld is. Wil je opnieuw koppelen, verwijder de bridge dan eerst uit de Woning-app.
 - Bediening buiten je thuisnetwerk vraagt een thuishub in je Woning-app (een Apple TV of HomePod).
 - Verwijder je de app van Homey, dan verdwijnen ook de koppeling en je selectie, en moet je opnieuw koppelen.
-- Dit is een testversie. Meld gerust problemen en ideeën.
+- Problemen en ideeën zijn welkom op de GitHub-pagina van de app (zie de links van deze app).
+
+Rechten
+Homeykit vraagt toegang tot de Homey API. Dat is nodig om je apparaten en hun status te lezen en ze te bedienen als je ze in HomeKit gebruikt. Er wordt niets buiten je Homey en je lokale netwerk verstuurd.
+
+Apple en HomeKit zijn handelsmerken van Apple Inc. Homeykit is een onafhankelijke app en is niet gelieerd aan of goedgekeurd door Apple.

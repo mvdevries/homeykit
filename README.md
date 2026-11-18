@@ -86,6 +86,11 @@ personal data such as device names and addresses.
 Bug reports, ideas and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Security
 problems go through [SECURITY.md](SECURITY.md).
 
+## Trademarks
+
+Apple and HomeKit are trademarks of Apple Inc. Homeykit is an independent project and is not affiliated with or
+endorsed by Apple.
+
 ## License
 
 Homeykit is released under the [MIT License](LICENSE).
