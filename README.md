@@ -4,137 +4,96 @@
 
 # Homeykit
 
-A Homey app written in Python that offers your Homey as a HomeKit bridge, built on
-[HAP-python](https://pypi.org/project/HAP-python). The Homey devices you choose appear in Apple's Home app
-and work with Siri, widgets and HomeKit automations. Everything runs locally on the Homey, without a cloud.
+Homeykit makes your Homey devices available in Apple HomeKit. It runs a HomeKit bridge inside your Homey, so the
+devices you choose show up in the Home app on your iPhone, iPad and Mac, and you can control them with Siri,
+widgets and HomeKit automations.
 
-## What the app does
+Everything runs on your Homey and your local network. Nothing is sent to the cloud.
 
-- Publishes a HomeKit bridge (port 51827) and shows a QR code and pincode for pairing.
-- Exposes the Homey devices you choose (lights, sockets, switches and sensors) to HomeKit and keeps them in sync in both directions.
-- Settings for the bridge name, the pincode and an optional startup delay, in English and Dutch.
-- Watches the IP address: if it changes, the bridge restarts briefly on the new address (the pairing is kept). Without a network address at startup, the app waits until there is one.
+## What you get
 
-## Structure
+- Choose which Homey devices appear in HomeKit, with search and filters.
+- Changes in the Home app reach Homey straight away, and changes in Homey show up in HomeKit within a few seconds.
+- Pair once with a QR code. Your rooms and automations in the Home app keep working when you change your selection.
+- Set the name of the bridge, your own pairing code and an optional startup delay.
+- If the IP address of your Homey changes, the bridge restarts by itself on the new address and stays paired.
+- The settings are available in English and Dutch.
 
-The code is organised in layers. A layer only uses the layers below it.
+## Supported devices
 
-```
-app.py                  App: builds the services and starts and stops the bridge
-api.py                  Endpoints of the app API, exported for Homey
-config/                 Constants: ports, default names, setting keys
-domain/                 Data models and rules without I/O
-  homey_device.py         Homey device and capabilities
-  device_row.py           A row in the device list
-  pincode.py              Rules and generation of the pincode
-  bridge_name.py          Rules for the bridge name
-  startup_delay.py        The startup delay and its limits
-repositories/           Reading and writing the Homey settings
-  legacy_settings_migration.py  Moves settings from the old (Dutch) keys to the current ones
-gateways/               Talking to the Homey Web API
-  homey_web_api.py        HTTP client with token
-  homey_devices_gateway.py  Devices, zones, icons and capabilities
-network/                Finding the local IP address of the Homey
-homekit/                HomeKit specifics
-  service_profiles.py     Which HomeKit services a device gets
-  value_conversions.py    Conversions between Homey and HomeKit values
-  homey_accessory.py      HAP accessory per Homey device
-  setup_uri.py            Pairing URI and QR code
-services/               The logic: one class per file
-  bridge_service.py       Creates, publishes and stops the HomeKit bridge
-  bridge_supervisor.py    Decides when the bridge starts, restarts and stops
-  device_sync_service.py  Keeps the accessories equal to the chosen devices
-  device_overview_service.py  The device list for the page
-  address_watchdog.py     Checks the IP address every minute and restarts the bridge on a change
-  bridge_name_service.py  The bridge name: custom name or the name of the Homey
-  startup_delay_service.py  Stores the startup delay
-  settings_service.py     The settings for the page and their consequences
-  icon_service.py         Fetching and caching device icons
-  pairing_service.py      Pairing details: QR code, pincode, status
-  pincode_service.py      The random or custom pincode
-  service_container.py    Wires all services together
-endpoints/              Thin endpoints that call the services
-settings/               Settings page (HTML, with css/ and js/ per concern)
-locales/                Translations (en.json, nl.json)
-assets/                 Icon and store images
-tests/                  unit/, integration/ and e2e/ tests, plus shared support code
-```
+| Device | What works in HomeKit |
+|---|---|
+| Lights | On and off, dimming and colour temperature |
+| Sockets and switches | On and off |
+| Sensors | Temperature, humidity, motion, contact (doors and windows) and water leak |
 
-## Development
+Other device types, such as thermostats, TVs, speakers and buttons, are not supported yet. They are shown as
+"Not supported" in the device list.
 
-Requires Node.js, the Homey CLI (`npx homey`), a running Docker and [uv](https://docs.astral.sh/uv/). Log in
-once with `npx homey login` and pick a Homey with `npx homey select`.
+## Requirements
 
-```
-npx homey app dependencies install      # prepare the Python packages
-npx homey app validate                  # validate
-npx homey app run --remote              # run on the Homey with live logs
-npx homey app install                   # install permanently
-```
+- A Homey Pro running Homey version 13 or later.
+- An iPhone, iPad or Mac with the Home app, on the same network as your Homey.
+- For control away from home: a home hub in your Home app (an Apple TV or HomePod).
 
-`run` does not reload changed code: stop and start it again after a change.
+## Getting started
 
-### Quality
+1. Install Homeykit on your Homey.
+2. Open the settings of the app. The first page shows a QR code and a pairing code.
+3. In the Home app on your iPhone tap **+**, choose **Add Accessory** and scan the QR code. You can also choose
+   **More options** and enter the code.
+4. Back in the app settings, open **Devices** and switch on the devices that should be visible in HomeKit.
 
-```
-uv sync                                 # development environment
-uv run ruff format .                    # format
-uv run ruff check .                     # lint
-uv run pytest                           # all tests with coverage
-uv run pytest tests/unit                # only unit tests
-uv run playwright install chromium      # once, for the end-to-end tests
-```
+## Settings
 
-The rules live in `pyproject.toml`. The tests use ten generic sample devices (`tests/support/sample_devices.py`):
+- **Devices**: choose which devices are visible in HomeKit. You can search and filter on active, inactive and
+  not supported devices.
+- **Name**: change the name of the bridge, or restore the default name (the name of your Homey). A new name
+  restarts the bridge briefly.
+- **Pincode**: the pairing code is chosen randomly the first time and stays the same afterwards. You can set
+  your own code or generate a new random one. Existing pairings keep working.
+- **Startup**: wait a number of seconds after the app starts before the bridge starts, so Homey can load all
+  devices first. This is off by default.
 
-- **Unit tests** cover the domain rules, conversions, profiles, repositories, gateways and services.
-- **Integration tests** run the real HAP-python bridge on loopback against a fake Homey API, including a
-  snapshot of the HomeKit description of all supported devices.
-- **End-to-end tests** drive the settings page in Chromium (Playwright) against the real services.
+## Good to know
 
-Coverage must stay at or above 90%.
+- The Home app only offers pairing while the bridge is not paired. To pair again, first remove the bridge from
+  the Home app.
+- If you remove the app from Homey, the pairing and your selection are removed as well, and you need to pair
+  again.
 
-### Pipelines
+## Troubleshooting
 
-- **Pull request** (`.github/workflows/pull-request.yml`): checks the branch name, runs lint and formatting,
-  all tests with a coverage report (also as a comment on the pull request) and a build validation.
-- **Release** (`.github/workflows/release.yml`): on every merge to `main` it determines the version, runs the
-  same checks, uploads the app to Athom and creates a tag and GitHub release. The upload job runs in the
-  `production` environment, which holds the secret `HOMEY_PAT`.
-- **Dependabot** updates the GitHub Actions and the Python packages weekly.
+**A device shows "No Response" in the Home app**
+- Check that your Homey and your iPhone are on the same network, and that the Homey is reachable.
+- Restart the Homeykit app on your Homey. The bridge starts again and HomeKit reconnects.
+- Make sure the router does not block local discovery between devices (mDNS) or port 51827.
 
-### Versioning
+**The bridge does not appear when pairing**
+- Check that the bridge is not already paired: remove it from the Home app first.
+- Open the settings page. If it says the bridge has not started yet, a startup delay may be set; wait for it to
+  finish or turn the delay off.
 
-The version is determined by the release pipeline from the branch name of the pull request you merge:
+**A new device is missing in HomeKit**
+- Open **Devices** in the app settings and switch the device on. Devices of an unsupported type cannot be
+  switched on.
 
-| Branch name   | Version bump |
-|---------------|--------------|
-| `breaking/…`  | major        |
-| `feature/…`   | minor        |
-| `fix/…`       | patch        |
+Still stuck? Open an [issue](../../issues) with the version of the app and what you see. Please leave out
+personal data such as device names and addresses.
 
-Pull requests are squash merged. The pipeline looks up the pull request of the merged commit, takes its branch
-name and raises the latest `v<version>` tag by that kind of version. The title of the pull request becomes the
-squash commit title and the changelog text. The version in the manifest is replaced during the run and is not
-committed.
+## Contributing
 
-### Publishing a test version by hand
-
-```
-HOMEY_HEADLESS=1 npx homey app publish
-```
-
-This needs a changelog entry for the current version in `.homeychangelog.json` and a `README.txt`. Publishing
-it as a test version afterwards is done in [tools.developer.homey.app](https://tools.developer.homey.app).
+Bug reports, ideas and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Security
+problems go through [SECURITY.md](SECURITY.md).
 
 ## License
 
-Homeykit is released under the [MIT License](LICENSE). Its runtime dependencies are Apache-2.0, BSD, MIT, MPL-2.0
-and LGPL-2.1 (zeroconf) licensed and are installed as packages, not copied into this repository.
+Homeykit is released under the [MIT License](LICENSE).
 
-## Sources
+## Credits
 
-- The store images and the header are made from the photo
-  ["Turned on gray flat screen smart TV"](https://www.pexels.com/photo/turned-on-gray-flat-screen-smart-tv-1571459/)
-  from Pexels, used under the [Pexels License](https://www.pexels.com/license/) (free for commercial use, no
-  attribution required). The original is not included; the images are cropped and the header is darkened.
+The store images and the header are made from the photo
+["Turned on gray flat screen smart TV"](https://www.pexels.com/photo/turned-on-gray-flat-screen-smart-tv-1571459/)
+from Pexels, used under the [Pexels License](https://www.pexels.com/license/). The original is not included;
+the images are cropped and the header is darkened. Homeykit is built on
+[HAP-python](https://pypi.org/project/HAP-python).
