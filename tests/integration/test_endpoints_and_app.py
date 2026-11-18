@@ -4,12 +4,12 @@ from unittest.mock import patch
 
 import pytest
 from homeykit import api
+from homeykit import container as service_container_module
 from homeykit.app import App
 from homeykit.domain import errors
 from homeykit.domain.errors import SettingsValidationError
 from homeykit.endpoints.service_lookup import get_service_container
-from homeykit.gateways.homey_web_api import HomeyWebApiClient
-from homeykit.services import service_container as service_container_module
+from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
 
 from tests.support.fake_homey_api import FakeTokenSource
 from tests.support.fixtures import InMemorySettings
@@ -103,10 +103,12 @@ async def test_app_lifecycle_migrates_legacy_settings(
     ) as scope:
         port, state = scope.port, tmp_path / "homeykit.state"
     with (
-        patch("homeykit.services.bridge_service.BRIDGE_PORT", port),
-        patch("homeykit.services.bridge_service.BRIDGE_STATE_FILE_PATH", str(state)),
-        patch("homeykit.services.bridge_supervisor.find_local_ip_address", network),
-        patch("homeykit.services.address_watchdog.find_local_ip_address", network),
+        patch("homeykit.infrastructure.homekit.hap_bridge.BRIDGE_PORT", port),
+        patch(
+            "homeykit.infrastructure.homekit.hap_bridge.BRIDGE_STATE_FILE_PATH",
+            str(state),
+        ),
+        patch("homeykit.container.find_local_ip_address", network),
         patch.object(
             service_container_module,
             "HomeyWebApiClient",

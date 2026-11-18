@@ -1,13 +1,10 @@
 from typing import Any
 
-from homey.homey import Homey
+from ..container import ServiceContainer
+from .endpoint import endpoint
+from .endpoint_types import JsonBody
 
-from .endpoint_types import EmptyBody, EndpointParams, EndpointQuery
-from .service_lookup import get_service_container
 
-
-async def get_pairing(
-    *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: EmptyBody
-) -> Any:
-    pairing_service = get_service_container(homey).pairing_service
-    return pairing_service.build_pairing_info()
+@endpoint
+async def get_pairing(services: ServiceContainer, body: JsonBody) -> Any:
+    return services.pairing_service.build_pairing_info()

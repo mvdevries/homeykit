@@ -1,23 +1,30 @@
 import httpx
 import pytest
-from homeykit.config.bridge_defaults import BRIDGE_DEFAULT_NAME
-from homeykit.domain.device_row import DeviceRow
-from homeykit.domain.errors import SettingsValidationError
-from homeykit.gateways.homey_devices_gateway import HomeyDevicesGateway
-from homeykit.gateways.homey_web_api import HomeyWebApiClient
-from homeykit.repositories.bridge_name_repository import BridgeNameRepository
-from homeykit.repositories.exposed_devices_repository import ExposedDevicesRepository
-from homeykit.repositories.pincode_repository import PincodeRepository
-from homeykit.repositories.settings_storage import JsonSettingsAccess
-from homeykit.repositories.startup_delay_repository import StartupDelayRepository
-from homeykit.services.bridge_name_service import BridgeNameService
-from homeykit.services.device_overview_service import (
+from homeykit.application.bridge_name_service import BridgeNameService
+from homeykit.application.device_overview_service import (
     DeviceOverviewService,
     build_sort_key,
 )
-from homeykit.services.icon_service import IconService, convert_svg_to_data_uri
-from homeykit.services.pincode_service import PincodeService
-from homeykit.services.startup_delay_service import StartupDelayService
+from homeykit.application.icon_service import IconService, convert_svg_to_data_uri
+from homeykit.application.pincode_service import PincodeService
+from homeykit.application.startup_delay_service import StartupDelayService
+from homeykit.domain.defaults import BRIDGE_DEFAULT_NAME
+from homeykit.domain.device_row import DeviceRow
+from homeykit.domain.errors import SettingsValidationError
+from homeykit.infrastructure.gateways.homey_devices_gateway import HomeyDevicesGateway
+from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
+from homeykit.infrastructure.homekit.device_support import HomeKitDeviceSupport
+from homeykit.infrastructure.repositories.bridge_name_repository import (
+    BridgeNameRepository,
+)
+from homeykit.infrastructure.repositories.exposed_devices_repository import (
+    ExposedDevicesRepository,
+)
+from homeykit.infrastructure.repositories.pincode_repository import PincodeRepository
+from homeykit.infrastructure.repositories.settings_access import SettingsAccess
+from homeykit.infrastructure.repositories.startup_delay_repository import (
+    StartupDelayRepository,
+)
 
 from tests.support.sample_devices import SUPPORTED_DEVICE_IDS
 
@@ -30,28 +37,28 @@ def gateway(fake_homey_api, token_source):
 
 class TestPincodeService:
     async def test_creates_and_keeps_a_pincode(self, settings):
-        service = PincodeService(PincodeRepository(settings))
+        service = PincodeService(PincodeRepository(SettingsAccess(settings)))
         first = await service.get_or_create_pincode()
         assert await service.get_or_create_pincode() == first
 
     async def test_replaces_an_invalid_stored_pincode(self, settings):
         settings.values["bridge_pincode"] = "11111111"
-        service = PincodeService(PincodeRepository(settings))
+        service = PincodeService(PincodeRepository(SettingsAccess(settings)))
         assert await service.get_or_create_pincode() != "11111111"
 
     async def test_sets_custom_pincode(self, settings):
-        service = PincodeService(PincodeRepository(settings))
+        service = PincodeService(PincodeRepository(SettingsAccess(settings)))
         assert await service.set_custom_or_random_pincode("20481357") == "204-81-357"
         assert settings.values["bridge_pincode"] == "204-81-357"
 
     async def test_rejects_invalid_custom_pincode(self, settings):
-        service = PincodeService(PincodeRepository(settings))
+        service = PincodeService(PincodeRepository(SettingsAccess(settings)))
         with pytest.raises(SettingsValidationError):
             await service.set_custom_or_random_pincode("1")
 
     @pytest.mark.parametrize("text", [None, "", "  "])
     async def test_new_random_pincode_differs_from_current(self, settings, text):
-        service = PincodeService(PincodeRepository(settings))
+        service = PincodeService(PincodeRepository(SettingsAccess(settings)))
         current = await service.get_or_create_pincode()
         assert await service.set_custom_or_random_pincode(text) != current
 
@@ -60,7 +67,7 @@ class TestBridgeNameService:
     @pytest.fixture
     def service(self, settings, gateway, log):
         return BridgeNameService(
-            bridge_name_repository=BridgeNameRepository(settings),
+            bridge_name_repository=BridgeNameRepository(SettingsAccess(settings)),
             devices_gateway=gateway,
             log=log,
         )
@@ -91,7 +98,7 @@ class TestBridgeNameService:
 class TestStartupDelayService:
     @pytest.fixture
     def service(self, settings):
-        return StartupDelayService(StartupDelayRepository(settings))
+        return StartupDelayService(StartupDelayRepository(SettingsAccess(settings)))
 
     def test_default_is_disabled(self, service):
         delay = service.read_startup_delay()
@@ -114,8 +121,9 @@ class TestDeviceOverviewService:
         return DeviceOverviewService(
             devices_gateway=gateway,
             exposed_devices_repository=ExposedDevicesRepository(
-                JsonSettingsAccess(settings)
+                SettingsAccess(settings)
             ),
+            device_support=HomeKitDeviceSupport(),
         )
 
     async def test_lists_all_ten_devices_sorted_by_zone_then_name(self, service):
@@ -145,7 +153,7 @@ class TestIconService:
     @pytest.fixture(autouse=True)
     def no_pause(self, monkeypatch):
         monkeypatch.setattr(
-            "homeykit.services.icon_service.ICON_DOWNLOAD_PAUSE_SECONDS", 0
+            "homeykit.application.icon_service.ICON_DOWNLOAD_PAUSE_SECONDS", 0
         )
 
     def test_converts_svg_to_data_uri(self):

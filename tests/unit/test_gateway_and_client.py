@@ -2,11 +2,11 @@ import json
 
 import httpx
 import pytest
-from homeykit.gateways.homey_devices_gateway import (
+from homeykit.infrastructure.gateways.homey_devices_gateway import (
     HomeyDevicesGateway,
     extract_payload_items,
 )
-from homeykit.gateways.homey_web_api import HomeyWebApiClient
+from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
 
 from tests.support.fake_homey_api import OWNER_TOKEN
 from tests.support.sample_devices import ICON_SVG

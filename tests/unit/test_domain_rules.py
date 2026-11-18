@@ -1,10 +1,10 @@
 import pytest
-from homeykit.config.bridge_defaults import (
+from homeykit.domain import errors
+from homeykit.domain.bridge_name import collapse_whitespace, normalize_bridge_name
+from homeykit.domain.defaults import (
     BRIDGE_NAME_MAX_LENGTH,
     STARTUP_DELAY_MAX_SECONDS,
 )
-from homeykit.domain import errors
-from homeykit.domain.bridge_name import collapse_whitespace, normalize_bridge_name
 from homeykit.domain.device_row import DeviceRow
 from homeykit.domain.errors import SettingsValidationError
 from homeykit.domain.pincode import (

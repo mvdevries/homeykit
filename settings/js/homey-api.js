@@ -1,11 +1,4 @@
 (function (ui) {
-  const KNOWN_ERROR_CODES = [
-    "bridge_name_too_long",
-    "startup_delay_out_of_range",
-    "pincode_invalid_format",
-    "pincode_too_simple",
-  ];
-
   let homeyInstance = null;
 
   function extractErrorMessage(error) {
@@ -32,7 +25,7 @@
 
   ui.describeError = function (error) {
     const message = extractErrorMessage(error);
-    if (KNOWN_ERROR_CODES.indexOf(message) !== -1) {
+    if (ui.hasTranslation("errors." + message)) {
       return ui.translate("errors." + message);
     }
     return message || ui.translate("toast.error");

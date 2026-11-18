@@ -1,9 +1,8 @@
 from typing import Any
 
-from homey.homey import Homey
-
-from .endpoint_types import EmptyBody, EndpointParams, EndpointQuery, JsonBody
-from .service_lookup import get_service_container
+from ..container import ServiceContainer
+from .endpoint import endpoint
+from .endpoint_types import JsonBody
 
 
 def read_optional_text(body: JsonBody, key: str) -> str | None:
@@ -11,33 +10,27 @@ def read_optional_text(body: JsonBody, key: str) -> str | None:
     return value if isinstance(value, str) else None
 
 
-async def get_settings(
-    *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: EmptyBody
-) -> Any:
-    settings_service = get_service_container(homey).settings_service
-    return await settings_service.build_settings_overview()
+@endpoint
+async def get_settings(services: ServiceContainer, body: JsonBody) -> Any:
+    return await services.settings_service.build_settings_overview()
 
 
-async def set_bridge_name(
-    *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: JsonBody
-) -> Any:
-    settings_service = get_service_container(homey).settings_service
-    return await settings_service.set_bridge_name(
+@endpoint
+async def set_bridge_name(services: ServiceContainer, body: JsonBody) -> Any:
+    return await services.settings_service.set_bridge_name(
         read_optional_text(body, "bridge_name")
     )
 
 
-async def set_pincode(
-    *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: JsonBody
-) -> Any:
-    settings_service = get_service_container(homey).settings_service
-    return await settings_service.set_pincode(read_optional_text(body, "pincode"))
+@endpoint
+async def set_pincode(services: ServiceContainer, body: JsonBody) -> Any:
+    return await services.settings_service.set_pincode(
+        read_optional_text(body, "pincode")
+    )
 
 
-async def set_startup_delay(
-    *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: JsonBody
-) -> Any:
-    settings_service = get_service_container(homey).settings_service
-    return await settings_service.set_startup_delay(
+@endpoint
+async def set_startup_delay(services: ServiceContainer, body: JsonBody) -> Any:
+    return await services.settings_service.set_startup_delay(
         enabled=bool(body.get("enabled")), seconds=int(body.get("seconds", 0))
     )

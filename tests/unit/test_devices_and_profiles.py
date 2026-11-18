@@ -1,6 +1,6 @@
 import pytest
-from homeykit.gateways.homey_device_parser import parse_homey_device
-from homeykit.homekit.service_profiles import (
+from homeykit.infrastructure.gateways.homey_device_parser import parse_homey_device
+from homeykit.infrastructure.homekit.service_profiles import (
     build_service_profiles,
     is_device_supported,
 )
