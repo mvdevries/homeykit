@@ -56,6 +56,18 @@
     "get_pairing": {
       "method": "GET",
       "path": "/pairing"
+    },
+    "get_devices": {
+      "method": "GET",
+      "path": "/devices"
+    },
+    "set_exposed_devices": {
+      "method": "PUT",
+      "path": "/devices/exposed"
+    },
+    "get_icons": {
+      "method": "GET",
+      "path": "/icons"
     }
   },
   "pythonPackages": [
