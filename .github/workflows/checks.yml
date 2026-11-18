@@ -57,6 +57,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
-      - uses: athombv/github-action-homey-app-validate@v1
+      - uses: actions/setup-node@v4
         with:
-          level: publish
+          node-version: 22
+      - name: Validate the app
+        env:
+          HOMEY_HEADLESS: "1"
+        run: npx --yes homey app validate --level publish

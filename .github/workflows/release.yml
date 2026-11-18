@@ -70,6 +70,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Fill in the version and changelog
         env:
           VERSION: ${{ needs.version.outputs.version }}
@@ -84,14 +87,18 @@ jobs:
           jq --arg version "$VERSION" --arg text "$CHANGELOG" \
             '.[$version] = {en: $text, nl: $text}' .homeychangelog.json > changelog.tmp
           mv changelog.tmp .homeychangelog.json
-      - uses: athombv/github-action-homey-app-validate@v1
-        with:
-          level: publish
+      - name: Validate the app
+        env:
+          HOMEY_HEADLESS: "1"
+        run: npx --yes homey app validate --level publish
       - name: Upload
         id: publish
-        uses: athombv/github-action-homey-app-publish@v1
-        with:
-          personal_access_token: ${{ secrets.HOMEY_PAT }}
+        env:
+          HOMEY_HEADLESS: "1"
+          HOMEY_PAT: ${{ secrets.HOMEY_PAT }}
+        run: |
+          npx --yes homey app publish
+          echo "url=https://tools.developer.homey.app/apps/app/$(jq --raw-output .id app.json)" >> "$GITHUB_OUTPUT"
       - name: Create tag and release
         env:
           GH_TOKEN: ${{ github.token }}
