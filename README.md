@@ -126,6 +126,11 @@ HOMEY_HEADLESS=1 npx homey app publish
 This needs a changelog entry for the current version in `.homeychangelog.json` and a `README.txt`. Publishing
 it as a test version afterwards is done in [tools.developer.homey.app](https://tools.developer.homey.app).
 
+## License
+
+Homeykit is released under the [MIT License](LICENSE). Its runtime dependencies are Apache-2.0, BSD, MIT, MPL-2.0
+and LGPL-2.1 (zeroconf) licensed and are installed as packages, not copied into this repository.
+
 ## Sources
 
 - The store images and the header are made from the photo
