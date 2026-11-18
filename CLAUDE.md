@@ -1,53 +1,57 @@
 # Homeykit
 
-Homey-app in Python die Homey als HomeKit-bridge aanbiedt (HAP-python). Zie `README.md` voor de
-structuur en de commando's.
+A Homey app in Python that offers Homey as a HomeKit bridge (HAP-python). See `README.md` for the
+structure and the commands. The rules for working in this repository are in `.claude/rules/`.
 
-## Afspraken
+## Agreements
 
-- **Code is Engels**: namen van variabelen, functies, klassen, bestanden, CSS-klassen, instellingssleutels
-  en logregels. Commit-berichten, PR-teksten en docs (`README.md`, deze file) zijn Nederlands. Teksten
-  voor de gebruiker staan in `locales/nl.json` en `locales/en.json`, nooit hardcoded in `settings/`.
-- **Geen commentaar of docstrings in code.** Alleen Martyn schrijft commentaar. Laat de code zichzelf
-  uitleggen met kleine functies en uitgebreide namen: liever te veel dan te weinig.
-- Houd functies klein en laat ze één ding doen. Een naam beschrijft wat de functie doet.
-- Python 3.14 en modern: type hints, dataclasses met `slots`, `match`, `Protocol`, `asyncio`.
-- Wijzigingen gaan via een branch en een pull request, nooit direct naar `main`. Merge alleen als
-  Martyn dat zegt. Geen `Co-Authored-By` of andere Claude-attributie in commits en PR's.
-- Draai de app alleen op de Homey als Martyn dat vraagt. De app start en stop je als achtergrondtaak
-  met `npx homey app run --remote`, en na elke codewijziging herstart je hem. Geen Rex-panelen.
-- Het uploaden en publiceren van een build doe je alleen op uitdrukkelijk verzoek.
+- **The working language is English**, see `.claude/rules/language.md`. User-facing texts live in
+  `locales/nl.json` and `locales/en.json`, never hardcoded in `settings/`.
+- **Never write comments or docstrings in code**, see `.claude/rules/comments.md`. Let the code explain
+  itself with small functions and descriptive names: too verbose is better than not clear enough.
+- Keep functions small and let them do one thing. A name describes what the function does.
+- Python 3.14 and modern: type hints, dataclasses with `slots`, `match`, `Protocol`, `asyncio`.
+- Changes go through a branch and a pull request, never directly to `main`. Merge only when the maintainer
+  says so. No `Co-Authored-By` or other Claude attribution in commits and pull requests.
+- Only run the app on the Homey when the maintainer asks. Start and stop it as a background task with
+  `npx homey app run --remote`, and restart it after every code change.
+- Uploading and publishing a build is only done on explicit request.
+- Branch names start with `breaking/`, `feature/` or `fix/`: the release pipeline derives the version from
+  them (major, minor, patch). Merge with a merge commit, not a squash.
+- Tests live in `tests/unit`, `tests/integration` and `tests/e2e` (pytest, coverage at least 90%). Test
+  devices are generic (`tests/support/sample_devices.py`); never put real devices, names or addresses in them.
+- Format and lint with `uv run ruff format .` and `uv run ruff check .`; the pipeline fails otherwise.
+- No secrets, personal data, real device names or home network addresses anywhere in the repository.
 
-## Structuur
+## Structure
 
-Lagen, van onder naar boven: `config` en `domain`, `repositories`, `gateways` en `homekit`, `services`,
-`endpoints`, en daarboven `app.py` en `api.py`. Een laag gebruikt alleen lagen onder zich. Services staan in
-`services/`, één klasse per bestand, en worden samengesteld in `services/service_container.py`.
+Layers, from bottom to top: `config` and `domain`, `repositories`, `gateways` and `homekit`, `services`,
+`endpoints`, and above those `app.py` and `api.py`. A layer only uses layers below it. Services live in
+`services/`, one class per file, and are wired together in `services/service_container.py`.
 
-## Dingen die je moet weten
+## Things you need to know
 
-- `self.homey.api` in de Python-SDK is **niet** de Homey Web API. Voor apparaten vraagt de app een
-  token (`get_owner_api_token`) en het lokale adres (`get_local_url`) en gebruikt `httpx`. Homey beperkt
-  het aantal verzoeken (429): haal iconen rustig op.
-- Homey zet eigen stijlen op `label`, `button` en `input` (hoofdletters, opvulling, hoogte). Gebruik in
-  `settings/` gewone elementen (`div`, `span`) en maak de opvulling van invoervelden dwingend.
-  Het `hidden`-attribuut werkt alleen door de regel `[hidden] { display: none !important }`.
-- Het app-icoon (`assets/icon.svg`) moet **één kleur** zijn op doorzichtig: Homey kleurt het in
-  met de `brandColor`. Gevulde plaatjes of gekleurde tegels worden één effen vlak.
-- Tokens in vertalingen zijn `__name__`, niet `{name}`. Fouten uit de backend zijn codes
-  (`bridge_name_too_long`) die de pagina vertaalt.
-- De Homey-API geeft apparaten als object met `capabilitiesObj`; het icoon van het apparaattype staat
-  in `iconObj`. Gekozen iconen (`iconOverride`) zijn niet via de API op te halen.
-- pyhap maakt de koppel-URI alleen met `pyqrcode`; `homekit/setup_uri.py` rekent hem zelf uit.
-- HomeKit-ID's (`aid`) van accessoires worden bewaard in de Homey-instellingen zodat kamers en
-  automatiseringen in de Woning-app blijven kloppen. Verwijder die niet, en houd de volgorde van
-  diensten en kenmerken in een accessoire gelijk (dat bepaalt de `iid`).
-- pyhap kiest het IP-adres één keer bij het starten en luistert en adverteert daarop. Verandert het
-  adres later, dan klopt de mDNS-advertentie niet meer en luistert de server op het oude adres.
-  `services/address_watchdog.py` controleert dit elke minuut en `BridgeSupervisor` herstart dan de
-  bridge (de koppeling blijft, die staat in het state-bestand). HomeKitty verloor zo (ciao) het
-  IPv4-adres en adverteerde alleen Thread-adressen.
-- `homey app publish` is interactief; met `HOMEY_HEADLESS=1` is het dat niet (zie `README.md`).
-- Oude instellingssleutels (`aangeboden`, `aids`, `bridge_naam`, `start_vertraging_aan`, `start_vertraging_seconden`)
-  worden bij het opstarten door `repositories/legacy_settings_migration.py` overgenomen naar de Engelse sleutels en
-  daarna verwijderd. Een bestaande nieuwe waarde wordt nooit overschreven.
+- `self.homey.api` in the Python SDK is **not** the Homey Web API. For devices the app asks for a token
+  (`get_owner_api_token`) and the local address (`get_local_url`) and uses `httpx`. Homey limits the number
+  of requests (429): fetch icons slowly.
+- Homey puts its own styles on `label`, `button` and `input` (capitals, padding, height). Use plain elements
+  (`div`, `span`) in `settings/` and make the padding of inputs mandatory. The `hidden` attribute only works
+  because of the rule `[hidden] { display: none !important }`.
+- The app icon (`assets/icon.svg`) is used by Homey as a mask: only its transparency counts, Homey colours it
+  with the `brandColor`. Filled pictures or coloured tiles become one flat shape.
+- Tokens in translations are `__name__`, not `{name}`. Errors from the backend are codes
+  (`bridge_name_too_long`) that the page translates.
+- The Homey API returns devices as an object with `capabilitiesObj`; the icon of the device type is in
+  `iconObj`. Chosen icons (`iconOverride`) cannot be fetched through the API.
+- pyhap only builds the pairing URI with `pyqrcode`; `homekit/setup_uri.py` calculates it itself.
+- HomeKit IDs (`aid`) of accessories are stored in the Homey settings so rooms and automations in the Home app
+  keep working. Do not delete them, and keep the order of services and characteristics in an accessory the
+  same (that determines the `iid`).
+- pyhap chooses the IP address once at start and listens and advertises on it. If the address changes later,
+  the mDNS advertisement is wrong and the server listens on the old address. `services/address_watchdog.py`
+  checks this every minute and `BridgeSupervisor` then restarts the bridge (the pairing stays, it lives in
+  the state file).
+- `homey app publish` is interactive; with `HOMEY_HEADLESS=1` it is not (see `README.md`).
+- Old setting keys (`aangeboden`, `aids`, `bridge_naam`, `start_vertraging_aan`,
+  `start_vertraging_seconden`) are moved to the English keys at startup by
+  `repositories/legacy_settings_migration.py` and then removed. An existing new value is never overwritten.

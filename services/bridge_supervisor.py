@@ -32,7 +32,9 @@ class BridgeSupervisor:
 
     async def start(self) -> None:
         await self._bridge_name_service.load_default_name_from_homey()
-        delay_seconds = self._startup_delay_service.read_startup_delay().effective_seconds
+        delay_seconds = (
+            self._startup_delay_service.read_startup_delay().effective_seconds
+        )
         local_address = find_local_ip_address()
         if delay_seconds > 0 or local_address is None:
             self._schedule_delayed_start(delay_seconds)
@@ -59,7 +61,9 @@ class BridgeSupervisor:
     def seconds_until_start(self) -> int | None:
         if self._delayed_start_deadline is None:
             return None
-        remaining_seconds = self._delayed_start_deadline - asyncio.get_running_loop().time()
+        remaining_seconds = (
+            self._delayed_start_deadline - asyncio.get_running_loop().time()
+        )
         return max(0, round(remaining_seconds))
 
     def _schedule_delayed_start(self, delay_seconds: int) -> None:
@@ -67,7 +71,9 @@ class BridgeSupervisor:
         if delay_seconds > 0:
             self._delayed_start_deadline = loop.time() + delay_seconds
             self._log(f"The bridge starts in {delay_seconds} seconds")
-        self._delayed_start_task = loop.create_task(self._run_delayed_start(delay_seconds))
+        self._delayed_start_task = loop.create_task(
+            self._run_delayed_start(delay_seconds)
+        )
 
     async def _run_delayed_start(self, delay_seconds: int) -> None:
         try:
@@ -119,7 +125,9 @@ class BridgeSupervisor:
         await self._bridge_service.publish_bridge()
         self._device_sync_service.mark_bridge_published()
         self._device_sync_service.start_polling()
-        self._log(f"Exposing {self._device_sync_service.exposed_accessory_count} devices")
+        self._log(
+            f"Exposing {self._device_sync_service.exposed_accessory_count} devices"
+        )
 
     async def _stop_bridge(self) -> None:
         self._current_address = None
