@@ -17,7 +17,7 @@ structure and the commands. The rules for working in this repository are in `.cl
   `npx homey app run --remote`, and restart it after every code change.
 - Uploading and publishing a build is only done on explicit request.
 - Branch names start with `breaking/`, `feature/` or `fix/`: the release pipeline derives the version from
-  them (major, minor, patch). Merge with a merge commit, not a squash.
+  them (major, minor, patch). Pull requests are squash merged; the pipeline reads the branch name from the pull request.
 - Tests live in `tests/unit`, `tests/integration` and `tests/e2e` (pytest, coverage at least 90%). Test
   devices are generic (`tests/support/sample_devices.py`); never put real devices, names or addresses in them.
 - Format and lint with `uv run ruff format .` and `uv run ruff check .`; the pipeline fails otherwise.
