@@ -24,7 +24,7 @@ uv sync
 uv run playwright install chromium
 ```
 
-See `README.md` for running the app on a Homey.
+Log in once with `npx homey login` and pick a Homey with `npx homey select`.
 
 ## Making a change
 
@@ -36,7 +36,7 @@ See `README.md` for running the app on a Homey.
 2. Keep the code style of the project:
    - small functions that do one thing, with descriptive names (too verbose is better than not clear enough)
    - **no comments or docstrings in code**: explain in the pull request or the README instead
-   - layers only use layers below them (see `README.md`)
+   - layers only use layers below them (see `CLAUDE.md` for the layout)
 3. Add tests. Unit tests for logic, integration tests for the bridge and services, end-to-end tests for the
    settings page. Test devices come from `tests/support/sample_devices.py` and stay generic.
 4. Run everything locally:
@@ -52,6 +52,56 @@ See `README.md` for running the app on a Homey.
    what changed and why. The pull request checks must pass.
 
 Pull requests are squash merged, so the title of the pull request becomes the commit message on `main`.
+
+## Running on a Homey
+
+```
+npx homey app dependencies install      # prepare the Python packages
+npx homey app validate                  # validate
+npx homey app run --remote              # run on the Homey with live logs
+npx homey app install                   # install permanently
+```
+
+`run` does not reload changed code: stop and start it again after a change.
+
+## Tests and quality
+
+```
+uv run ruff format .                    # format
+uv run ruff check .                     # lint
+uv run pytest                           # all tests with coverage
+uv run pytest tests/unit                # only unit tests
+```
+
+The rules live in `pyproject.toml`.
+
+- **Unit tests** cover the domain rules, conversions, profiles, repositories, gateways and services.
+- **Integration tests** run the real HAP-python bridge on loopback against a fake Homey API, including a
+  snapshot of the HomeKit description of all supported devices.
+- **End-to-end tests** drive the settings page in Chromium (Playwright) against the real services.
+
+## Pipelines and releases
+
+- **Pull request** (`.github/workflows/pull-request.yml`): checks the branch name, runs lint and formatting, all
+  tests with a coverage report (also as a comment on the pull request) and a build validation.
+- **Release** (`.github/workflows/release.yml`): on every merge to `main` it determines the version, runs the
+  same checks, uploads the app to Athom and creates a tag and GitHub release. The upload runs in the
+  `production` environment, which holds the secret `HOMEY_PAT`.
+- **CodeQL** (`.github/workflows/codeql.yml`) scans the Python code, the settings page and the workflows for
+  security problems on pushes and pull requests to `main`, and every week.
+- **Dependabot** updates the GitHub Actions and the Python packages weekly.
+
+The version comes from the branch name of the merged pull request:
+
+| Branch name   | Version bump |
+|---------------|--------------|
+| `breaking/…`  | major        |
+| `feature/…`   | minor        |
+| `fix/…`       | patch        |
+
+The pipeline raises the latest `v<version>` tag by that kind of version. The title of the pull request becomes
+the squash commit title and the changelog text. The version in the manifest is replaced during the run and is
+not committed.
 
 ## Reporting security problems
 

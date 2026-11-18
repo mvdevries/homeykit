@@ -1,7 +1,7 @@
 # Homeykit
 
-A Homey app in Python that offers Homey as a HomeKit bridge (HAP-python). See `README.md` for the
-structure and the commands. The rules for working in this repository are in `.claude/rules/`.
+A Homey app in Python that offers Homey as a HomeKit bridge (HAP-python). See `CONTRIBUTING.md` for the
+commands, tests and pipelines. The rules for working in this repository are in `.claude/rules/`.
 
 ## Agreements
 
@@ -51,7 +51,6 @@ Layers, from bottom to top: `config` and `domain`, `repositories`, `gateways` an
   the mDNS advertisement is wrong and the server listens on the old address. `services/address_watchdog.py`
   checks this every minute and `BridgeSupervisor` then restarts the bridge (the pairing stays, it lives in
   the state file).
-- `homey app publish` is interactive; with `HOMEY_HEADLESS=1` it is not (see `README.md`).
 - Old setting keys (`aangeboden`, `aids`, `bridge_naam`, `start_vertraging_aan`,
   `start_vertraging_seconden`) are moved to the English keys at startup by
   `repositories/legacy_settings_migration.py` and then removed. An existing new value is never overwritten.
