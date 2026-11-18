@@ -1,0 +1,61 @@
+name: Controles
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint en formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  test:
+    name: Tests en coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - name: Unit- en integratietests
+        run: uv run pytest tests/unit tests/integration --cov --cov-report=
+      - name: Playwright installeren
+        run: uv run playwright install --with-deps chromium
+      - name: End-to-endtests
+        run: uv run pytest tests/e2e --cov --cov-append --cov-report=
+      - name: Coverage-rapport
+        run: |
+          uv run coverage xml
+          uv run coverage report --format=markdown --fail-under=90 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Coverage in de pull request
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: orgoro/coverage@v3.3.1
+        with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          thresholdAll: 0.9
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage.xml
+          if-no-files-found: ignore
+
+  build:
+    name: Bouwen en valideren
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: athombv/github-action-homey-app-validate@v1
+        with:
+          level: publish
