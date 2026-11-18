@@ -11,6 +11,33 @@
       "alreadyPaired": "Deze bridge is al gekoppeld. Je hebt de code alleen nodig om opnieuw te koppelen, nadat je de bridge uit de Woning-app hebt verwijderd.",
       "notStarted": "De bridge is nog niet gestart.",
       "loadFailed": "Kon de koppelgegevens niet ophalen."
+    },
+    "back": "Terug",
+    "menu": {
+      "devices": "Apparaten"
+    },
+    "devices": {
+      "title": "Apparaten",
+      "intro": "Kies welke apparaten zichtbaar zijn in HomeKit",
+      "search": "Zoeken",
+      "filterActive": "Actief",
+      "filterInactive": "Niet actief",
+      "filterUnsupported": "Niet ondersteund",
+      "noZone": "Geen zone",
+      "unsupported": "Niet ondersteund",
+      "noFilterTitle": "Geen filter geselecteerd",
+      "noFilterText": "Kies Actief, Niet actief of Niet ondersteund om apparaten te zien.",
+      "noResultsTitle": "Geen apparaten gevonden",
+      "noResultsText": "Pas de zoekterm of de geselecteerde filters aan.",
+      "exposedCount": "__count__ van __total__ aangeboden",
+      "noneExposed": "Nog geen apparaten aangeboden",
+      "loadFailed": "Kon de apparaten niet ophalen"
+    },
+    "toast": {
+      "saving": "Opslaan...",
+      "saved": "Opgeslagen",
+      "saveFailed": "Opslaan mislukt",
+      "error": "Er ging iets mis"
     }
   }
 }

@@ -13,12 +13,25 @@ De code staat in lagen. Een laag gebruikt alleen lagen die onder hem staan.
 app.py                  App: bouwt de services en start en stopt de bridge
 api.py                  Routes van de app-API, geëxporteerd voor Homey
 config/                 Vaste waarden: poorten, standaardnamen, instellingssleutels
-domain/                 Gegevensmodellen en regels zonder I/O (pincode, fouten)
+domain/                 Gegevensmodellen en regels zonder I/O
+  homey_device.py         Homey-apparaat en capabilities
+  device_row.py           Een regel in de apparatenlijst
+  pincode.py              Regels en generatie van de pincode
 storage/                Lezen en schrijven van de Homey-instellingen
-homekit/                HomeKit-specifiek: koppel-URI en QR-code
+gateways/               Praten met de Homey Web API
+  homey_web_api.py        HTTP-client met token
+  homey_devices_gateway.py  Apparaten, zones, iconen en capabilities
+homekit/                HomeKit-specifiek
+  service_profiles.py     Welke HomeKit-diensten een apparaat krijgt
+  value_conversions.py    Omzettingen tussen Homey- en HomeKit-waarden
+  homey_accessory.py      HAP-accessoire per Homey-apparaat
+  setup_uri.py            Koppel-URI en QR-code
 services/               De logica: één klasse per bestand
   bridge_service.py       Maakt, publiceert en stopt de HomeKit-bridge
   bridge_supervisor.py    Bepaalt wanneer de bridge start en stopt
+  device_sync_service.py  Houdt de accessoires gelijk aan de gekozen apparaten
+  device_overview_service.py  De apparatenlijst voor de pagina
+  icon_service.py         Apparaaticonen ophalen en bewaren
   pairing_service.py      Gegevens om te koppelen: QR-code, pincode, status
   pincode_service.py      Bewaart de willekeurige pincode
   service_container.py    Stelt alle services samen
