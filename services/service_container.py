@@ -9,6 +9,7 @@ from ..storage.exposed_devices_store import ExposedDevicesStore
 from ..storage.pincode_store import PincodeStore
 from ..storage.settings_storage import JsonSettingsAccess, SettingsStorage
 from ..storage.startup_delay_store import StartupDelayStore
+from .address_watchdog import AddressWatchdog
 from .bridge_name_service import BridgeNameService
 from .bridge_service import BridgeService
 from .bridge_supervisor import BridgeSupervisor
@@ -29,6 +30,7 @@ class ServiceContainer:
     device_overview_service: DeviceOverviewService
     icon_service: IconService
     settings_service: SettingsService
+    address_watchdog: AddressWatchdog
     web_api_client: HomeyWebApiClient
 
     async def close_connections(self) -> None:
@@ -81,6 +83,11 @@ def build_service_container(
             startup_delay_service=startup_delay_service,
             bridge_service=bridge_service,
             bridge_supervisor=bridge_supervisor,
+        ),
+        address_watchdog=AddressWatchdog(
+            read_current_address=bridge_supervisor.current_address,
+            on_address_changed=bridge_supervisor.restart_bridge_on_new_address,
+            log=log,
         ),
         web_api_client=web_api_client,
     )

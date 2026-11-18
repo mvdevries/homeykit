@@ -42,4 +42,9 @@ Lagen, van onder naar boven: `config` en `domain`, `storage`, `gateways` en `hom
 - HomeKit-ID's (`aid`) van accessoires worden bewaard in de Homey-instellingen zodat kamers en
   automatiseringen in de Woning-app blijven kloppen. Verwijder die niet, en houd de volgorde van
   diensten en kenmerken in een accessoire gelijk (dat bepaalt de `iid`).
+- pyhap kiest het IP-adres één keer bij het starten en luistert en adverteert daarop. Verandert het
+  adres later, dan klopt de mDNS-advertentie niet meer en luistert de server op het oude adres.
+  `services/address_watchdog.py` controleert dit elke minuut en `BridgeSupervisor` herstart dan de
+  bridge (de koppeling blijft, die staat in het state-bestand). HomeKitty verloor zo (ciao) het
+  IPv4-adres en adverteerde alleen Thread-adressen.
 - `homey app publish` is interactief; met `HOMEY_HEADLESS=1` is het dat niet (zie `README.md`).
