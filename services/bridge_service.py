@@ -14,6 +14,7 @@ class RunningBridge:
     driver: AccessoryDriver
     bridge: Bridge
     name: str
+    address: str
 
     @property
     def is_paired(self) -> bool:
@@ -38,17 +39,22 @@ class BridgeService:
     def running_bridge(self) -> RunningBridge | None:
         return self._running_bridge
 
-    async def create_bridge(self, name: str) -> RunningBridge:
+    async def create_bridge(self, name: str, address: str) -> RunningBridge:
         pincode = await self._pincode_service.get_or_create_pincode()
-        driver = self._build_driver(pincode)
+        driver = self._build_driver(pincode, address)
         bridge = self._build_bridge(driver, name)
-        self._running_bridge = RunningBridge(driver=driver, bridge=bridge, name=name)
+        self._running_bridge = RunningBridge(
+            driver=driver, bridge=bridge, name=name, address=address
+        )
         return self._running_bridge
 
     async def publish_bridge(self) -> None:
         running_bridge = self._require_running_bridge()
         await running_bridge.driver.async_start()
-        self._log(f"Bridge '{running_bridge.name}' published on port {BRIDGE_PORT}")
+        self._log(
+            f"Bridge '{running_bridge.name}' published on port {BRIDGE_PORT} "
+            f"at address {running_bridge.address}"
+        )
 
     def apply_pincode_to_running_bridge(self, pincode: str) -> None:
         if self._running_bridge is None:
@@ -62,8 +68,9 @@ class BridgeService:
         self._running_bridge = None
 
     @staticmethod
-    def _build_driver(pincode: str) -> AccessoryDriver:
+    def _build_driver(pincode: str, address: str) -> AccessoryDriver:
         return AccessoryDriver(
+            address=address,
             port=BRIDGE_PORT,
             persist_file=BRIDGE_STATE_FILE_PATH,
             pincode=pincode.encode(),

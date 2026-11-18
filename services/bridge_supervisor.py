@@ -1,7 +1,9 @@
 import asyncio
 import contextlib
 
+from ..config.network_defaults import ADDRESS_RETRY_INTERVAL_SECONDS
 from ..domain.log_function import LogFunction
+from ..network.local_address import find_local_ip_address
 from .bridge_name_service import BridgeNameService
 from .bridge_service import BridgeService, RunningBridge
 from .device_sync_service import DeviceSyncService
@@ -26,14 +28,16 @@ class BridgeSupervisor:
         self._lifecycle_lock = asyncio.Lock()
         self._delayed_start_task: asyncio.Task[None] | None = None
         self._delayed_start_deadline: float | None = None
+        self._current_address: str | None = None
 
     async def start(self) -> None:
         await self._bridge_name_service.load_default_name_from_homey()
         delay_seconds = self._startup_delay_service.read_startup_delay().effective_seconds
-        if delay_seconds > 0:
+        local_address = find_local_ip_address()
+        if delay_seconds > 0 or local_address is None:
             self._schedule_delayed_start(delay_seconds)
         else:
-            await self._start_bridge()
+            await self._start_bridge(local_address)
 
     async def shutdown(self) -> None:
         await self._cancel_delayed_start()
@@ -44,6 +48,14 @@ class BridgeSupervisor:
             await self._stop_bridge()
             await self._start_bridge()
 
+    async def restart_bridge_on_new_address(self, address: str) -> None:
+        async with self._lifecycle_lock:
+            await self._stop_bridge()
+            await self._start_bridge(address)
+
+    def current_address(self) -> str | None:
+        return self._current_address
+
     def seconds_until_start(self) -> int | None:
         if self._delayed_start_deadline is None:
             return None
@@ -52,20 +64,29 @@ class BridgeSupervisor:
 
     def _schedule_delayed_start(self, delay_seconds: int) -> None:
         loop = asyncio.get_running_loop()
-        self._delayed_start_deadline = loop.time() + delay_seconds
+        if delay_seconds > 0:
+            self._delayed_start_deadline = loop.time() + delay_seconds
+            self._log(f"The bridge starts in {delay_seconds} seconds")
         self._delayed_start_task = loop.create_task(self._run_delayed_start(delay_seconds))
-        self._log(f"The bridge starts in {delay_seconds} seconds")
 
     async def _run_delayed_start(self, delay_seconds: int) -> None:
         try:
-            await asyncio.sleep(delay_seconds)
+            if delay_seconds > 0:
+                await asyncio.sleep(delay_seconds)
+            local_address = await self._wait_for_local_address()
             self._delayed_start_deadline = None
             async with self._lifecycle_lock:
-                await self._start_bridge()
+                await self._start_bridge(local_address)
         except asyncio.CancelledError:
             raise
         except Exception as error:
             self._log(f"Starting the bridge failed: {error}")
+
+    async def _wait_for_local_address(self) -> str:
+        while (local_address := find_local_ip_address()) is None:
+            self._log("No network address yet, trying again")
+            await asyncio.sleep(ADDRESS_RETRY_INTERVAL_SECONDS)
+        return local_address
 
     async def _cancel_delayed_start(self) -> None:
         if self._delayed_start_task is None:
@@ -76,10 +97,21 @@ class BridgeSupervisor:
         self._delayed_start_task = None
         self._delayed_start_deadline = None
 
-    async def _start_bridge(self) -> None:
+    async def _start_bridge(self, address: str | None = None) -> None:
+        bridge_address = address or self._require_local_address()
         bridge_name = self._bridge_name_service.resolve_bridge_name()
-        running_bridge = await self._bridge_service.create_bridge(name=bridge_name)
+        running_bridge = await self._bridge_service.create_bridge(
+            name=bridge_name, address=bridge_address
+        )
         await self._expose_devices_and_publish(running_bridge)
+        self._current_address = bridge_address
+
+    @staticmethod
+    def _require_local_address() -> str:
+        local_address = find_local_ip_address()
+        if local_address is None:
+            raise RuntimeError("No network address is available")
+        return local_address
 
     async def _expose_devices_and_publish(self, running_bridge: RunningBridge) -> None:
         self._device_sync_service.attach_to_bridge(running_bridge)
@@ -90,5 +122,6 @@ class BridgeSupervisor:
         self._log(f"Exposing {self._device_sync_service.exposed_accessory_count} devices")
 
     async def _stop_bridge(self) -> None:
+        self._current_address = None
         await self._device_sync_service.detach_from_bridge()
         await self._bridge_service.stop_bridge()
