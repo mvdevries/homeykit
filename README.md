@@ -27,6 +27,7 @@ domain/                 Gegevensmodellen en regels zonder I/O
   bridge_name.py          Regels voor de naam van de bridge
   startup_delay.py        De opstartvertraging en de grenzen ervan
 storage/                Lezen en schrijven van de Homey-instellingen
+  legacy_settings_migration.py  Neemt instellingen van de oude (Nederlandse) sleutels over
 gateways/               Praten met de Homey Web API
   homey_web_api.py        HTTP-client met token
   homey_devices_gateway.py  Apparaten, zones, iconen en capabilities
