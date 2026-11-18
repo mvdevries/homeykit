@@ -4,8 +4,10 @@ from dataclasses import dataclass
 
 import httpx
 
-from ..config.device_defaults import ICON_DOWNLOAD_PAUSE_SECONDS, ICON_MAX_SVG_CHARACTERS
-from ..domain.homey_device import HomeyDevice
+from ..config.device_defaults import (
+    ICON_DOWNLOAD_PAUSE_SECONDS,
+    ICON_MAX_SVG_CHARACTERS,
+)
 from ..gateways.homey_devices_gateway import HomeyDevicesGateway
 
 HTTP_TOO_MANY_REQUESTS = 429

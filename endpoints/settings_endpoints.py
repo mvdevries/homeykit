@@ -2,7 +2,7 @@ from typing import Any
 
 from homey.homey import Homey
 
-from .endpoint_types import EmptyBody, JsonBody, EndpointParams, EndpointQuery
+from .endpoint_types import EmptyBody, EndpointParams, EndpointQuery, JsonBody
 from .service_lookup import get_service_container
 
 
@@ -22,7 +22,9 @@ async def set_bridge_name(
     *, homey: Homey, query: EndpointQuery, params: EndpointParams, body: JsonBody
 ) -> Any:
     settings_service = get_service_container(homey).settings_service
-    return await settings_service.set_bridge_name(read_optional_text(body, "bridge_name"))
+    return await settings_service.set_bridge_name(
+        read_optional_text(body, "bridge_name")
+    )
 
 
 async def set_pincode(

@@ -1,0 +1,813 @@
+[
+  {
+    "aid": 2,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "sensor"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Climate sensor"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "climate-sensor"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "float",
+            "iid": 9,
+            "maxValue": 100,
+            "minStep": 0.1,
+            "minValue": -50,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "11",
+            "unit": "celsius",
+            "value": 21.5
+          }
+        ],
+        "iid": 8,
+        "type": "8A"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "float",
+            "iid": 11,
+            "maxValue": 100,
+            "minStep": 1,
+            "minValue": 0,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "10",
+            "unit": "percentage",
+            "value": 48
+          }
+        ],
+        "iid": 10,
+        "type": "82"
+      }
+    ]
+  },
+  {
+    "aid": 3,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "light"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Dimmable lamp"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "dimmable-lamp"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "25",
+            "value": true
+          },
+          {
+            "format": "int",
+            "iid": 10,
+            "maxValue": 100,
+            "minStep": 1,
+            "minValue": 0,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "8",
+            "unit": "percentage",
+            "value": 50
+          }
+        ],
+        "iid": 8,
+        "type": "43"
+      }
+    ]
+  },
+  {
+    "aid": 4,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "sensor"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Door sensor"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "door-sensor"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "uint8",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "6A",
+            "valid-values": [
+              0,
+              1
+            ],
+            "value": 1
+          }
+        ],
+        "iid": 8,
+        "type": "80"
+      }
+    ]
+  },
+  {
+    "aid": 5,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "sensor"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Leak sensor"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "leak-sensor"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "uint8",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "70",
+            "valid-values": [
+              0,
+              1
+            ],
+            "value": 0
+          }
+        ],
+        "iid": 8,
+        "type": "83"
+      }
+    ]
+  },
+  {
+    "aid": 6,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "sensor"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Motion sensor"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "motion-sensor"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "22",
+            "value": false
+          }
+        ],
+        "iid": 8,
+        "type": "85"
+      }
+    ]
+  },
+  {
+    "aid": 8,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "light"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Plain lamp"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "plain-lamp"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "25",
+            "value": false
+          }
+        ],
+        "iid": 8,
+        "type": "43"
+      }
+    ]
+  },
+  {
+    "aid": 9,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "light"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Tunable white lamp"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "tunable-lamp"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "25",
+            "value": true
+          },
+          {
+            "format": "int",
+            "iid": 10,
+            "maxValue": 100,
+            "minStep": 1,
+            "minValue": 0,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "8",
+            "unit": "percentage",
+            "value": 100
+          },
+          {
+            "format": "uint32",
+            "iid": 11,
+            "maxValue": 500,
+            "minStep": 1,
+            "minValue": 140,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "CE",
+            "value": 230
+          }
+        ],
+        "iid": 8,
+        "type": "43"
+      }
+    ]
+  },
+  {
+    "aid": 10,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "socket"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Wall socket"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "wall-socket"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "25",
+            "value": true
+          },
+          {
+            "format": "bool",
+            "iid": 10,
+            "perms": [
+              "pr",
+              "ev"
+            ],
+            "type": "26",
+            "value": false
+          }
+        ],
+        "iid": 8,
+        "type": "47"
+      }
+    ]
+  },
+  {
+    "aid": 11,
+    "services": [
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 2,
+            "perms": [
+              "pw"
+            ],
+            "type": "14"
+          },
+          {
+            "format": "string",
+            "iid": 3,
+            "perms": [
+              "pr"
+            ],
+            "type": "20",
+            "value": "Homey"
+          },
+          {
+            "format": "string",
+            "iid": 4,
+            "perms": [
+              "pr"
+            ],
+            "type": "21",
+            "value": "switch"
+          },
+          {
+            "format": "string",
+            "iid": 5,
+            "perms": [
+              "pr"
+            ],
+            "type": "23",
+            "value": "Wall switch"
+          },
+          {
+            "format": "string",
+            "iid": 6,
+            "perms": [
+              "pr"
+            ],
+            "type": "30",
+            "value": "wall-switch"
+          },
+          {
+            "format": "string",
+            "iid": 7,
+            "perms": [
+              "pr"
+            ],
+            "type": "52",
+            "value": ""
+          }
+        ],
+        "iid": 1,
+        "type": "3E"
+      },
+      {
+        "characteristics": [
+          {
+            "format": "bool",
+            "iid": 9,
+            "perms": [
+              "pr",
+              "pw",
+              "ev"
+            ],
+            "type": "25",
+            "value": false
+          }
+        ],
+        "iid": 8,
+        "type": "49"
+      }
+    ]
+  }
+]

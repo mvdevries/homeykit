@@ -1,0 +1,37 @@
+name: Pull request
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pull-request-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  branch-name:
+    name: Branchnaam
+    runs-on: ubuntu-latest
+    steps:
+      - name: Controleer de branchnaam
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          if [[ ! "$BRANCH" =~ ^(breaking|feature|fix)/.+ && ! "$BRANCH" =~ ^dependabot/.+ ]]; then
+            echo "De branchnaam '$BRANCH' moet beginnen met breaking/, feature/ of fix/ (de release-pipeline bepaalt hieruit de versie)." >&2
+            exit 1
+          fi
+          case "$BRANCH" in
+            breaking/*) echo "Deze PR geeft een major-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+            feature/*) echo "Deze PR geeft een minor-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+            *) echo "Deze PR geeft een patch-versie." >> "$GITHUB_STEP_SUMMARY" ;;
+          esac
+
+  checks:
+    name: Controles
+    uses: ./.github/workflows/checks.yml
+    permissions:
+      contents: read
+      pull-requests: write
