@@ -10,11 +10,15 @@
       "step3": "Scan de QR-code, of kies Meer opties en voer de code in.",
       "alreadyPaired": "Deze bridge is al gekoppeld. Je hebt de code alleen nodig om opnieuw te koppelen, nadat je de bridge uit de Woning-app hebt verwijderd.",
       "notStarted": "De bridge is nog niet gestart.",
-      "loadFailed": "Kon de koppelgegevens niet ophalen."
+      "loadFailed": "Kon de koppelgegevens niet ophalen.",
+      "startsIn": "De bridge start over __seconds__ seconden."
     },
     "back": "Terug",
     "menu": {
-      "devices": "Apparaten"
+      "devices": "Apparaten",
+      "name": "Naam",
+      "pincode": "Pincode",
+      "startup": "Opstarten"
     },
     "devices": {
       "title": "Apparaten",
@@ -38,6 +42,45 @@
       "saved": "Opgeslagen",
       "saveFailed": "Opslaan mislukt",
       "error": "Er ging iets mis"
+    },
+    "start": {
+      "settingsFailed": "Kon de instellingen niet ophalen",
+      "waits": "Wacht __seconds__ s na opstarten",
+      "immediate": "Direct starten"
+    },
+    "bridgeName": {
+      "title": "Naam",
+      "intro": "Zo heet de bridge in HomeKit. Een nieuwe naam herstart de bridge even.",
+      "placeholder": "Naam van de bridge",
+      "default": "Standaardnaam: __name__",
+      "save": "Opslaan",
+      "restoreDefault": "Standaardnaam herstellen"
+    },
+    "pincode": {
+      "title": "Pincode",
+      "intro": "Deze code heb je nodig om de bridge te koppelen met de Woning-app. Hij is willekeurig gekozen bij de eerste start en blijft daarna gelijk. Je kunt zelf een code instellen of een nieuwe willekeurige code laten maken. Bestaande koppelingen blijven werken.",
+      "current": "Huidige pincode",
+      "own": "Eigen pincode",
+      "placeholder": "000-00-000",
+      "help": "Acht cijfers. HomeKit weigert eenvoudige codes, zoals 111-11-111 en 123-45-678.",
+      "save": "Opslaan",
+      "random": "Nieuwe willekeurige pincode",
+      "updated": "Pincode ingesteld"
+    },
+    "startup": {
+      "title": "Opstarten",
+      "intro": "Wacht na het opstarten van de app even voordat de bridge start, zodat Homey eerst alle apparaten kan laden.",
+      "wait": "Wachten na opstarten",
+      "delay": "Wachttijd",
+      "seconds": "seconden",
+      "help": "Een wijziging geldt vanaf de volgende keer dat de app opstart.",
+      "invalid": "Kies een wachttijd tussen 1 en 600 seconden"
+    },
+    "errors": {
+      "bridge_name_too_long": "De naam mag maximaal 64 tekens zijn",
+      "startup_delay_out_of_range": "Kies een wachttijd tussen 1 en 600 seconden",
+      "pincode_invalid_format": "Een pincode bestaat uit acht cijfers",
+      "pincode_too_simple": "HomeKit accepteert deze code niet, kies een minder eenvoudige code"
     }
   }
 }

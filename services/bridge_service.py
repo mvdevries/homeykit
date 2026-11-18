@@ -50,6 +50,11 @@ class BridgeService:
         await running_bridge.driver.async_start()
         self._log(f"Bridge '{running_bridge.name}' published on port {BRIDGE_PORT}")
 
+    def apply_pincode_to_running_bridge(self, pincode: str) -> None:
+        if self._running_bridge is None:
+            return
+        self._running_bridge.driver.state.pincode = pincode.encode()
+
     async def stop_bridge(self) -> None:
         if self._running_bridge is None:
             return
