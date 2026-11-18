@@ -30,7 +30,9 @@ class HomeyAccessory(Accessory):
         log: LogFunction,
         on_capability_written: CapabilityWrittenCallback,
     ) -> None:
-        super().__init__(driver, device.name[:ACCESSORY_NAME_MAX_LENGTH], aid=accessory_id)
+        super().__init__(
+            driver, device.name[:ACCESSORY_NAME_MAX_LENGTH], aid=accessory_id
+        )
         self.category = self._choose_category(profiles)
         self.homey_device = device
         self._devices_gateway = devices_gateway
@@ -104,7 +106,9 @@ class HomeyAccessory(Accessory):
             return
         self._on_capability_written(self.homey_device.id)
 
-    async def _write_prerequisite_capabilities(self, binding: CapabilityBinding) -> None:
+    async def _write_prerequisite_capabilities(
+        self, binding: CapabilityBinding
+    ) -> None:
         for capability_id, fixed_value in binding.capabilities_to_set_first:
             if self.homey_device.has_capability(capability_id):
                 await self._devices_gateway.set_capability_value(
@@ -113,8 +117,13 @@ class HomeyAccessory(Accessory):
 
     def update_from_device(self, device: HomeyDevice) -> None:
         self.homey_device = device
-        for capability_id, characteristics in self._characteristics_by_capability.items():
-            self._update_characteristics_for_capability(device, capability_id, characteristics)
+        for (
+            capability_id,
+            characteristics,
+        ) in self._characteristics_by_capability.items():
+            self._update_characteristics_for_capability(
+                device, capability_id, characteristics
+            )
 
     def _update_characteristics_for_capability(
         self,
@@ -126,7 +135,9 @@ class HomeyAccessory(Accessory):
         if capability is None or capability.value is None:
             return
         for characteristic, to_homekit in characteristics:
-            self._set_characteristic_value(device, capability_id, characteristic, to_homekit(capability.value))
+            self._set_characteristic_value(
+                device, capability_id, characteristic, to_homekit(capability.value)
+            )
 
     def _set_characteristic_value(
         self,
@@ -138,7 +149,9 @@ class HomeyAccessory(Accessory):
         try:
             characteristic.set_value(value)
         except ValueError as error:
-            self._log(f"Value of '{device.name}' ({capability_id}) is not usable: {error}")
+            self._log(
+                f"Value of '{device.name}' ({capability_id}) is not usable: {error}"
+            )
 
     async def cancel_pending_writes(self) -> None:
         for write_task in list(self._pending_writes):
