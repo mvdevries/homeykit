@@ -8,7 +8,9 @@ class App(app.App):
 
     async def on_init(self) -> None:
         self.services = build_service_container(
-            settings=self.homey.settings, log=self.log
+            settings=self.homey.settings,
+            token_source=self.homey.api,
+            log=self.log,
         )
         await self.services.bridge_supervisor.start()
 
@@ -16,6 +18,7 @@ class App(app.App):
         if self.services is None:
             return
         await self.services.bridge_supervisor.shutdown()
+        await self.services.close_connections()
         self.services = None
 
 

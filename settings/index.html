@@ -4,11 +4,34 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/menu.css" />
+    <link rel="stylesheet" href="css/navigation-bar.css" />
+    <link rel="stylesheet" href="css/forms.css" />
+    <link rel="stylesheet" href="css/switch.css" />
+    <link rel="stylesheet" href="css/toast.css" />
+    <link rel="stylesheet" href="css/device-list.css" />
     <link rel="stylesheet" href="css/pairing.css" />
     <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
   </head>
   <body>
     <main id="page-start" class="page">
+      <nav class="card menu" aria-label="Menu">
+        <a class="menu-row" href="#devices">
+          <span class="menu-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" />
+            </svg>
+          </span>
+          <span class="menu-text">
+            <span class="menu-title" data-i18n="settings.menu.devices"></span>
+            <span id="menu-devices-subtitle" class="menu-subtitle" data-i18n="settings.loading"></span>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+          </span>
+        </a>
+      </nav>
+
       <p id="start-message" class="muted" hidden></p>
 
       <section id="pairing-section" hidden>
@@ -35,8 +58,44 @@
       </section>
     </main>
 
+    <main id="page-devices" class="page" hidden>
+      <div class="nav-bar">
+        <a class="back-link" href="#">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+          <span data-i18n="settings.back"></span>
+        </a>
+        <h1 class="nav-title" data-i18n="settings.devices.title"></h1>
+        <span></span>
+      </div>
+
+      <p class="muted intro-text" data-i18n="settings.devices.intro"></p>
+
+      <input id="device-search" class="text-input" type="search" autocomplete="off" />
+
+      <div class="filters" role="group">
+        <span id="filter-active" class="chip" role="button" tabindex="0" aria-pressed="false" data-i18n="settings.devices.filterActive"></span>
+        <span id="filter-inactive" class="chip" role="button" tabindex="0" aria-pressed="false" data-i18n="settings.devices.filterInactive"></span>
+        <span id="filter-unsupported" class="chip" role="button" tabindex="0" aria-pressed="false" data-i18n="settings.devices.filterUnsupported"></span>
+      </div>
+
+      <p id="device-summary" class="muted small device-summary"></p>
+
+      <div id="device-list"></div>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
     <script type="text/javascript" src="js/translations.js"></script>
     <script type="text/javascript" src="js/homey-api.js"></script>
+    <script type="text/javascript" src="js/interactions.js"></script>
+    <script type="text/javascript" src="js/switch.js"></script>
+    <script type="text/javascript" src="js/toast.js"></script>
+    <script type="text/javascript" src="js/router.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script type="text/javascript" src="js/device-icons.js"></script>
+    <script type="text/javascript" src="js/devices-state.js"></script>
+    <script type="text/javascript" src="js/device-list-view.js"></script>
+    <script type="text/javascript" src="js/devices-page.js"></script>
     <script type="text/javascript" src="js/pairing-page.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
   </body>
