@@ -30,7 +30,15 @@ register_project_as_package()
 register_homey_sdk_stub()
 importlib.invalidate_caches()
 
-pytest_plugins = ["tests.support.fixtures"]
+pytest_plugins = [
+    "tests.support.fixtures",
+    "tests.integration.steps.scenario_context",
+    "tests.integration.steps.bridge_steps",
+    "tests.integration.steps.device_steps",
+    "tests.integration.steps.api_steps",
+    "tests.integration.steps.homey_app_steps",
+    "tests.e2e.steps.page_steps",
+]
 
 
 def pytest_collection_modifyitems(items):
