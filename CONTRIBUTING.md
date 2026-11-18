@@ -89,7 +89,8 @@ The rules live in `pyproject.toml`.
   `production` environment, which holds the secret `HOMEY_PAT`.
 - **CodeQL** (`.github/workflows/codeql.yml`) scans the Python code, the settings page and the workflows for
   security problems on pushes and pull requests to `main`, and every week.
-- **Dependabot** updates the GitHub Actions and the Python packages weekly.
+- **Dependabot** updates the GitHub Actions and the Python packages weekly. Minor and patch updates arrive in
+  one pull request per ecosystem, and major updates in a separate one so they can be reviewed on their own.
 
 The version comes from the branch name of the merged pull request:
 
