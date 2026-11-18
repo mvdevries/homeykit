@@ -10,11 +10,15 @@
       "step3": "Scan the QR code, or choose More options and enter the code.",
       "alreadyPaired": "This bridge is already paired. You only need the code to pair again, after you have removed the bridge from the Home app.",
       "notStarted": "The bridge has not started yet.",
-      "loadFailed": "Could not load the pairing details."
+      "loadFailed": "Could not load the pairing details.",
+      "startsIn": "The bridge starts in __seconds__ seconds."
     },
     "back": "Back",
     "menu": {
-      "devices": "Devices"
+      "devices": "Devices",
+      "name": "Name",
+      "pincode": "Pincode",
+      "startup": "Startup"
     },
     "devices": {
       "title": "Devices",
@@ -38,6 +42,45 @@
       "saved": "Saved",
       "saveFailed": "Saving failed",
       "error": "Something went wrong"
+    },
+    "start": {
+      "settingsFailed": "Could not load settings",
+      "waits": "Waits __seconds__ s after startup",
+      "immediate": "Starts immediately"
+    },
+    "bridgeName": {
+      "title": "Name",
+      "intro": "This is the name of the bridge in HomeKit. A new name restarts the bridge briefly.",
+      "placeholder": "Name of the bridge",
+      "default": "Default name: __name__",
+      "save": "Save",
+      "restoreDefault": "Restore default name"
+    },
+    "pincode": {
+      "title": "Pincode",
+      "intro": "You need this code to pair the bridge with the Home app. It is chosen randomly on first start and stays the same afterwards. You can set your own code or generate a new random one. Existing pairings keep working.",
+      "current": "Current pincode",
+      "own": "Your own pincode",
+      "placeholder": "000-00-000",
+      "help": "Eight digits. HomeKit rejects simple codes, such as 111-11-111 and 123-45-678.",
+      "save": "Save",
+      "random": "New random pincode",
+      "updated": "Pincode set"
+    },
+    "startup": {
+      "title": "Startup",
+      "intro": "Wait a moment after the app starts before the bridge starts, so Homey can load all devices first.",
+      "wait": "Wait after startup",
+      "delay": "Delay",
+      "seconds": "seconds",
+      "help": "A change applies the next time the app starts.",
+      "invalid": "Choose a delay between 1 and 600 seconds"
+    },
+    "errors": {
+      "bridge_name_too_long": "The name can be at most 64 characters",
+      "startup_delay_out_of_range": "Choose a delay between 1 and 600 seconds",
+      "pincode_invalid_format": "A pincode consists of eight digits",
+      "pincode_too_simple": "HomeKit does not accept this code, choose a less simple code"
     }
   }
 }

@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Any
 
 from ..homekit.setup_uri import build_qr_code_svg, build_setup_uri
@@ -5,13 +6,22 @@ from .bridge_service import BridgeService, RunningBridge
 
 
 class PairingService:
-    def __init__(self, *, bridge_service: BridgeService) -> None:
+    def __init__(
+        self,
+        *,
+        bridge_service: BridgeService,
+        seconds_until_start_provider: Callable[[], int | None],
+    ) -> None:
         self._bridge_service = bridge_service
+        self._seconds_until_start_provider = seconds_until_start_provider
 
     def build_pairing_info(self) -> dict[str, Any]:
         running_bridge = self._bridge_service.running_bridge
         if running_bridge is None:
-            return {"available": False}
+            return {
+                "available": False,
+                "seconds_until_start": self._seconds_until_start_provider(),
+            }
         return self._build_info_for_running_bridge(running_bridge)
 
     def _build_info_for_running_bridge(

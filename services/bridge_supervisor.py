@@ -1,7 +1,11 @@
-from ..config.bridge_defaults import BRIDGE_DEFAULT_NAME
+import asyncio
+import contextlib
+
 from ..domain.log_function import LogFunction
+from .bridge_name_service import BridgeNameService
 from .bridge_service import BridgeService, RunningBridge
 from .device_sync_service import DeviceSyncService
+from .startup_delay_service import StartupDelayService
 
 
 class BridgeSupervisor:
@@ -10,20 +14,71 @@ class BridgeSupervisor:
         *,
         bridge_service: BridgeService,
         device_sync_service: DeviceSyncService,
+        bridge_name_service: BridgeNameService,
+        startup_delay_service: StartupDelayService,
         log: LogFunction,
     ) -> None:
         self._bridge_service = bridge_service
         self._device_sync_service = device_sync_service
+        self._bridge_name_service = bridge_name_service
+        self._startup_delay_service = startup_delay_service
         self._log = log
+        self._lifecycle_lock = asyncio.Lock()
+        self._delayed_start_task: asyncio.Task[None] | None = None
+        self._delayed_start_deadline: float | None = None
 
     async def start(self) -> None:
-        await self._start_bridge()
+        await self._bridge_name_service.load_default_name_from_homey()
+        delay_seconds = self._startup_delay_service.read_startup_delay().effective_seconds
+        if delay_seconds > 0:
+            self._schedule_delayed_start(delay_seconds)
+        else:
+            await self._start_bridge()
 
     async def shutdown(self) -> None:
+        await self._cancel_delayed_start()
         await self._stop_bridge()
 
+    async def restart_bridge(self) -> None:
+        async with self._lifecycle_lock:
+            await self._stop_bridge()
+            await self._start_bridge()
+
+    def seconds_until_start(self) -> int | None:
+        if self._delayed_start_deadline is None:
+            return None
+        remaining_seconds = self._delayed_start_deadline - asyncio.get_running_loop().time()
+        return max(0, round(remaining_seconds))
+
+    def _schedule_delayed_start(self, delay_seconds: int) -> None:
+        loop = asyncio.get_running_loop()
+        self._delayed_start_deadline = loop.time() + delay_seconds
+        self._delayed_start_task = loop.create_task(self._run_delayed_start(delay_seconds))
+        self._log(f"The bridge starts in {delay_seconds} seconds")
+
+    async def _run_delayed_start(self, delay_seconds: int) -> None:
+        try:
+            await asyncio.sleep(delay_seconds)
+            self._delayed_start_deadline = None
+            async with self._lifecycle_lock:
+                await self._start_bridge()
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            self._log(f"Starting the bridge failed: {error}")
+
+    async def _cancel_delayed_start(self) -> None:
+        if self._delayed_start_task is None:
+            return
+        self._delayed_start_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await self._delayed_start_task
+        self._delayed_start_task = None
+        self._delayed_start_deadline = None
+
     async def _start_bridge(self) -> None:
-        running_bridge = await self._bridge_service.create_bridge(name=BRIDGE_DEFAULT_NAME)
+        bridge_name = self._bridge_name_service.resolve_bridge_name()
+        running_bridge = await self._bridge_service.create_bridge(name=bridge_name)
         await self._expose_devices_and_publish(running_bridge)
 
     async def _expose_devices_and_publish(self, running_bridge: RunningBridge) -> None:

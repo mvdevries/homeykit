@@ -33,11 +33,19 @@
     showPairingSection();
   }
 
+  function describeNotStarted(pairingInfo) {
+    const secondsUntilStart = pairingInfo.seconds_until_start;
+    if (secondsUntilStart === null || secondsUntilStart === undefined) {
+      return ui.translate("pairing.notStarted");
+    }
+    return ui.translate("pairing.startsIn", { seconds: secondsUntilStart });
+  }
+
   function showPairingInfoOrNotStarted(pairingInfo) {
     if (pairingInfo.available) {
       showPairingInfo(pairingInfo);
     } else {
-      showMessage(ui.translate("pairing.notStarted"));
+      showMessage(describeNotStarted(pairingInfo));
     }
   }
 
@@ -50,6 +58,7 @@
   }
 
   ui.pairingPage = {
+    refresh: refreshPairingInfo,
     start: function () {
       refreshPairingInfo();
       setInterval(refreshPairingInfo, REFRESH_INTERVAL_MILLISECONDS);

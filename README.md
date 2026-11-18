@@ -17,6 +17,8 @@ domain/                 Gegevensmodellen en regels zonder I/O
   homey_device.py         Homey-apparaat en capabilities
   device_row.py           Een regel in de apparatenlijst
   pincode.py              Regels en generatie van de pincode
+  bridge_name.py          Regels voor de naam van de bridge
+  startup_delay.py        De opstartvertraging en de grenzen ervan
 storage/                Lezen en schrijven van de Homey-instellingen
 gateways/               Praten met de Homey Web API
   homey_web_api.py        HTTP-client met token
@@ -28,12 +30,15 @@ homekit/                HomeKit-specifiek
   setup_uri.py            Koppel-URI en QR-code
 services/               De logica: één klasse per bestand
   bridge_service.py       Maakt, publiceert en stopt de HomeKit-bridge
-  bridge_supervisor.py    Bepaalt wanneer de bridge start en stopt
+  bridge_supervisor.py    Bepaalt wanneer de bridge start, herstart en stopt
   device_sync_service.py  Houdt de accessoires gelijk aan de gekozen apparaten
   device_overview_service.py  De apparatenlijst voor de pagina
+  bridge_name_service.py  De naam van de bridge: eigen naam of die van de Homey
+  startup_delay_service.py  Bewaart de opstartvertraging
+  settings_service.py     De instellingen voor de pagina en hun gevolgen
   icon_service.py         Apparaaticonen ophalen en bewaren
   pairing_service.py      Gegevens om te koppelen: QR-code, pincode, status
-  pincode_service.py      Bewaart de willekeurige pincode
+  pincode_service.py      De willekeurige of zelfgekozen pincode
   service_container.py    Stelt alle services samen
 routes/                 Dunne routes die de services aanroepen
 settings/               Instellingenpagina (HTML, css/ en js/ per onderdeel)
