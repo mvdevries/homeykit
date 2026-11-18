@@ -1,5 +1,5 @@
 import pytest
-from homeykit.homekit import value_conversions as conversions
+from homeykit.infrastructure.homekit import value_conversions as conversions
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,5 @@
 import base36
-from homeykit.homekit import setup_uri
+from homeykit.infrastructure.homekit import setup_uri
 
 BRIDGE_CATEGORY = 2
 

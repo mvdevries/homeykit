@@ -1,7 +1,9 @@
 from homey import app
 
-from .repositories.legacy_settings_migration import LegacySettingsMigration
-from .services.service_container import ServiceContainer, build_service_container
+from .container import ServiceContainer, build_service_container
+from .infrastructure.repositories.legacy_settings_migration import (
+    LegacySettingsMigration,
+)
 
 
 class App(app.App):

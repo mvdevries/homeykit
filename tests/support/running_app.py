@@ -6,15 +6,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import patch
 
-from homeykit.gateways.homey_web_api import HomeyWebApiClient
-from homeykit.services import address_watchdog as address_watchdog_module
-from homeykit.services import bridge_service as bridge_service_module
-from homeykit.services import bridge_supervisor as bridge_supervisor_module
-from homeykit.services import service_container as service_container_module
-from homeykit.services.service_container import (
+from homeykit import container as service_container_module
+from homeykit.application import address_watchdog as address_watchdog_module
+from homeykit.application import bridge_supervisor as bridge_supervisor_module
+from homeykit.container import (
     ServiceContainer,
     build_service_container,
 )
+from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
+from homeykit.infrastructure.homekit import bridge_service as bridge_service_module
 
 from tests.support.fake_homey_api import FakeHomeyApi, FakeTokenSource
 from tests.support.fixtures import InMemorySettings, LogRecorder, find_free_tcp_port

@@ -3,7 +3,7 @@ from typing import cast
 from homey.homey import Homey
 
 from ..app import App
-from ..services.service_container import ServiceContainer
+from ..container import ServiceContainer
 
 
 def get_service_container(homey: Homey) -> ServiceContainer:

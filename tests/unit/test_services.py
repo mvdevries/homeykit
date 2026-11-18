@@ -1,23 +1,29 @@
 import httpx
 import pytest
-from homeykit.config.bridge_defaults import BRIDGE_DEFAULT_NAME
-from homeykit.domain.device_row import DeviceRow
-from homeykit.domain.errors import SettingsValidationError
-from homeykit.gateways.homey_devices_gateway import HomeyDevicesGateway
-from homeykit.gateways.homey_web_api import HomeyWebApiClient
-from homeykit.repositories.bridge_name_repository import BridgeNameRepository
-from homeykit.repositories.exposed_devices_repository import ExposedDevicesRepository
-from homeykit.repositories.pincode_repository import PincodeRepository
-from homeykit.repositories.settings_storage import JsonSettingsAccess
-from homeykit.repositories.startup_delay_repository import StartupDelayRepository
-from homeykit.services.bridge_name_service import BridgeNameService
-from homeykit.services.device_overview_service import (
+from homeykit.application.bridge_name_service import BridgeNameService
+from homeykit.application.device_overview_service import (
     DeviceOverviewService,
     build_sort_key,
 )
-from homeykit.services.icon_service import IconService, convert_svg_to_data_uri
-from homeykit.services.pincode_service import PincodeService
-from homeykit.services.startup_delay_service import StartupDelayService
+from homeykit.application.icon_service import IconService, convert_svg_to_data_uri
+from homeykit.application.pincode_service import PincodeService
+from homeykit.application.startup_delay_service import StartupDelayService
+from homeykit.domain.defaults import BRIDGE_DEFAULT_NAME
+from homeykit.domain.device_row import DeviceRow
+from homeykit.domain.errors import SettingsValidationError
+from homeykit.infrastructure.gateways.homey_devices_gateway import HomeyDevicesGateway
+from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
+from homeykit.infrastructure.repositories.bridge_name_repository import (
+    BridgeNameRepository,
+)
+from homeykit.infrastructure.repositories.exposed_devices_repository import (
+    ExposedDevicesRepository,
+)
+from homeykit.infrastructure.repositories.pincode_repository import PincodeRepository
+from homeykit.infrastructure.repositories.settings_storage import JsonSettingsAccess
+from homeykit.infrastructure.repositories.startup_delay_repository import (
+    StartupDelayRepository,
+)
 
 from tests.support.sample_devices import SUPPORTED_DEVICE_IDS
 
@@ -145,7 +151,7 @@ class TestIconService:
     @pytest.fixture(autouse=True)
     def no_pause(self, monkeypatch):
         monkeypatch.setattr(
-            "homeykit.services.icon_service.ICON_DOWNLOAD_PAUSE_SECONDS", 0
+            "homeykit.application.icon_service.ICON_DOWNLOAD_PAUSE_SECONDS", 0
         )
 
     def test_converts_svg_to_data_uri(self):

@@ -60,7 +60,7 @@ async def test_pincode_survives_a_restart(tmp_path):
 
 async def test_start_without_network_address_waits(tmp_path, monkeypatch):
     monkeypatch.setattr(
-        "homeykit.services.bridge_supervisor.ADDRESS_RETRY_INTERVAL_SECONDS", 0.05
+        "homeykit.application.bridge_supervisor.ADDRESS_RETRY_INTERVAL_SECONDS", 0.05
     )
     async with running_app(tmp_path, start_bridge=False) as app:
         app.network_address[0] = None
