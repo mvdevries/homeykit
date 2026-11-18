@@ -14,5 +14,9 @@
   "0.1.3": {
     "en": "The app now watches the IP address of your Homey and restarts the bridge on the new address if it changes, and waits for a network address at startup.",
     "nl": "De app bewaakt nu het IP-adres van je Homey en herstart de bridge op het nieuwe adres als dat verandert, en wacht bij het opstarten op een netwerkadres."
+  },
+  "0.1.4": {
+    "en": "The code has been rewritten in English with a clearer structure. Your existing settings are carried over automatically; nothing changes functionally.",
+    "nl": "De code is herschreven in het Engels met een duidelijkere structuur. Je bestaande instellingen worden automatisch overgenomen; functioneel verandert er niets."
   }
 }
