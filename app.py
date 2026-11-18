@@ -12,11 +12,13 @@ class App(app.App):
             token_source=self.homey.api,
             log=self.log,
         )
+        self.services.address_watchdog.start()
         await self.services.bridge_supervisor.start()
 
     async def on_uninit(self) -> None:
         if self.services is None:
             return
+        await self.services.address_watchdog.stop()
         await self.services.bridge_supervisor.shutdown()
         await self.services.close_connections()
         self.services = None
