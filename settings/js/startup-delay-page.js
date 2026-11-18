@@ -35,14 +35,10 @@
       ui.toast.showError(ui.translate("startup.invalid"));
       return;
     }
-    ui.toast.showSaving();
-    try {
-      const body = { enabled: ui.isSwitchChecked(enabledSwitch), seconds: seconds };
+    const body = { enabled: ui.isSwitchChecked(enabledSwitch), seconds: seconds };
+    await ui.saveWithToast(async function () {
       ui.settingsState.set(await ui.callApi("PUT", "/settings/startup-delay", body));
-      ui.toast.showSaved();
-    } catch (error) {
-      ui.toast.showError(ui.describeError(error));
-    }
+    });
   }
 
   function scheduleSave() {

@@ -26,16 +26,19 @@
     pincodeInput.placeholder = ui.translate("pincode.placeholder");
   }
 
+  async function applyPincode(pincode) {
+    ui.settingsState.set(await ui.callApi("PUT", "/settings/pincode", { pincode: pincode }));
+    fillFromSettings();
+  }
+
   async function savePincode(pincode) {
-    ui.toast.showSaving();
-    try {
-      ui.settingsState.set(await ui.callApi("PUT", "/settings/pincode", { pincode: pincode }));
-      fillFromSettings();
-      ui.toast.showSaved(ui.translate("pincode.updated"));
-      ui.pairingPage.refresh();
-    } catch (error) {
-      ui.toast.showError(ui.describeError(error));
-    }
+    await ui.saveWithToast(
+      function () {
+        return applyPincode(pincode);
+      },
+      { savedText: ui.translate("pincode.updated") },
+    );
+    ui.pairingPage.refresh();
   }
 
   ui.pincodePage = {

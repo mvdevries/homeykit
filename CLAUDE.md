@@ -25,9 +25,27 @@ commands, tests and pipelines. The rules for working in this repository are in `
 
 ## Structure
 
-Layers, from bottom to top: `config` and `domain`, `repositories`, `gateways` and `homekit`, `services`,
-`endpoints`, and above those `app.py` and `api.py`. A layer only uses layers below it. Services live in
-`services/`, one class per file, and are wired together in `services/service_container.py`.
+The code follows the four layers of Clean Architecture. Dependencies only point inwards:
+
+```
+domain/            Entities and rules without I/O: models, validation, errors and the constants (defaults.py)
+application/       The use cases (one class per file) and ports.py, the interfaces they need
+infrastructure/    Everything that touches the outside, implementing the ports:
+  repositories/      Homey settings, through SettingsAccess
+  gateways/          The Homey Web API (httpx)
+  homekit/           HAP-python: the bridge (hap_bridge.py), accessories, service profiles, pairing URI
+  local_address.py   The IP address of the Homey
+endpoints/         The thin entry points for the Homey API, one decorator (`@endpoint`) injects the services
+container.py       Wires the implementations into the use cases (the composition root)
+app.py, api.py     Homey entry points; they stay in the root
+```
+
+- `domain` imports nothing from the other layers. `application` only imports `domain` and its own ports, never
+  HAP-python, httpx or Homey. `infrastructure` implements the ports. `endpoints`, `container.py` and `app.py` sit
+  on the outside and may know everything.
+- Use the shared helpers instead of writing new ones: `TaskSet`, `PeriodicTask` and `cancel_task` for background
+  tasks (`application/background_tasks.py`), `run_logging_errors` for "log the failure and carry on"
+  (`application/error_logging.py`) and `SettingsAccess` for reading and writing settings.
 
 ## Things you need to know
 
