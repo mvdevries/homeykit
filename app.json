@@ -53,6 +53,12 @@
     "email": "1821972+mvdevries@users.noreply.github.com"
   },
   "support": "mailto:1821972+mvdevries@users.noreply.github.com",
+  "api": {
+    "get_pairing": {
+      "method": "GET",
+      "path": "/pairing"
+    }
+  },
   "pythonPackages": [
     "HAP-python",
     "base36",
