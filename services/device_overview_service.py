@@ -2,7 +2,7 @@ from ..domain.device_row import DeviceRow
 from ..domain.homey_device import HomeyDevice
 from ..gateways.homey_devices_gateway import HomeyDevicesGateway
 from ..homekit.service_profiles import is_device_supported
-from ..storage.exposed_devices_store import ExposedDevicesStore
+from ..repositories.exposed_devices_repository import ExposedDevicesRepository
 
 
 def build_sort_key(row: DeviceRow) -> tuple[bool, str, str]:
@@ -15,15 +15,15 @@ class DeviceOverviewService:
         self,
         *,
         devices_gateway: HomeyDevicesGateway,
-        exposed_devices_store: ExposedDevicesStore,
+        exposed_devices_repository: ExposedDevicesRepository,
     ) -> None:
         self._devices_gateway = devices_gateway
-        self._exposed_devices_store = exposed_devices_store
+        self._exposed_devices_repository = exposed_devices_repository
 
     async def build_device_rows(self) -> list[DeviceRow]:
         devices = await self._devices_gateway.fetch_all_devices()
         zone_names = await self._devices_gateway.fetch_zone_names()
-        exposed_ids = self._exposed_devices_store.read_exposed_device_ids()
+        exposed_ids = self._exposed_devices_repository.read_exposed_device_ids()
         rows = [
             self._build_row(device, zone_names, exposed_ids)
             for device in devices.values()

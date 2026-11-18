@@ -5,7 +5,7 @@ from ..config.setting_keys import (
 from .settings_storage import SettingsStorage
 
 
-class StartupDelayStore:
+class StartupDelayRepository:
     def __init__(self, storage: SettingsStorage) -> None:
         self._storage = storage
 

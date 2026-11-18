@@ -1,11 +1,11 @@
 from ..domain.errors import SettingsValidationError
 from ..domain.pincode import generate_random_pincode, normalize_pincode_input
-from ..storage.pincode_store import PincodeStore
+from ..repositories.pincode_repository import PincodeRepository
 
 
 class PincodeService:
-    def __init__(self, pincode_store: PincodeStore) -> None:
-        self._pincode_store = pincode_store
+    def __init__(self, pincode_repository: PincodeRepository) -> None:
+        self._pincode_repository = pincode_repository
 
     async def get_or_create_pincode(self) -> str:
         existing_pincode = self.read_valid_stored_pincode()
@@ -18,11 +18,11 @@ class PincodeService:
             new_pincode = self._generate_pincode_different_from_current()
         else:
             new_pincode = normalize_pincode_input(text)
-        await self._pincode_store.save_pincode(new_pincode)
+        await self._pincode_repository.save_pincode(new_pincode)
         return new_pincode
 
     def read_valid_stored_pincode(self) -> str | None:
-        stored_pincode = self._pincode_store.read_pincode()
+        stored_pincode = self._pincode_repository.read_pincode()
         if stored_pincode is None:
             return None
         return self._normalize_or_none(stored_pincode)
@@ -36,7 +36,7 @@ class PincodeService:
 
     async def _create_and_save_random_pincode(self) -> str:
         new_pincode = generate_random_pincode()
-        await self._pincode_store.save_pincode(new_pincode)
+        await self._pincode_repository.save_pincode(new_pincode)
         return new_pincode
 
     @staticmethod
