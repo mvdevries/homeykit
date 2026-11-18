@@ -1,3 +1,8 @@
+.switch-slot {
+  display: flex;
+  flex: none;
+}
+
 .switch {
   position: relative;
   flex: none;

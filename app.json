@@ -69,6 +69,22 @@
     "get_icons": {
       "method": "GET",
       "path": "/icons"
+    },
+    "get_settings": {
+      "method": "GET",
+      "path": "/settings"
+    },
+    "set_bridge_name": {
+      "method": "PUT",
+      "path": "/settings/bridge-name"
+    },
+    "set_pincode": {
+      "method": "PUT",
+      "path": "/settings/pincode"
+    },
+    "set_startup_delay": {
+      "method": "PUT",
+      "path": "/settings/startup-delay"
     }
   },
   "pythonPackages": [

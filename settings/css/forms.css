@@ -23,3 +23,80 @@ input.text-input[type="text"] {
   -webkit-appearance: none;
   appearance: none;
 }
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: var(--card-background);
+  color: var(--accent);
+  font-weight: 600;
+  text-align: center;
+  text-transform: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.button:active {
+  opacity: 0.75;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 16px;
+  text-transform: none;
+}
+
+.setting-row + .setting-row {
+  border-top: 1px solid var(--line-color);
+}
+
+.setting-label {
+  font-size: 1rem;
+}
+
+.number-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.number-input {
+  box-sizing: border-box;
+  width: 84px;
+  height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 9px;
+  background: rgba(128, 128, 128, 0.18);
+  color: inherit;
+  font: inherit;
+  text-align: right;
+}
+
+.number-input:focus {
+  outline: 2px solid var(--accent);
+}
+
+input.number-input {
+  box-sizing: border-box !important;
+  height: 38px !important;
+  padding: 0 12px !important;
+  line-height: 38px !important;
+  text-indent: 0 !important;
+}
