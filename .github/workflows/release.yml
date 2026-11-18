@@ -46,9 +46,9 @@ jobs:
             title=$(git log -1 --format=%s)
           fi
           case "$branch" in
-            breaking/*) increment=major ;;
-            feature/*) increment=minor ;;
-            *) increment=patch ;;
+            breaking/*) increment="major" ;;
+            feature/*) increment="minor" ;;
+            *) increment="patch" ;;
           esac
           echo "title=$title" >> "$GITHUB_OUTPUT"
           echo "increment=$increment" >> "$GITHUB_OUTPUT"
@@ -60,7 +60,11 @@ jobs:
           scheme: semver
           increment: ${{ steps.pull-request.outputs.increment }}
       - name: Summary
-        run: echo "Version ${{ steps.next.outputs.version }}: ${{ steps.pull-request.outputs.title }}" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          VERSION: ${{ steps.next.outputs.version }}
+          TITLE: ${{ steps.pull-request.outputs.title }}
+        run: |
+          echo "Version $VERSION: $TITLE" >> "$GITHUB_STEP_SUMMARY"
 
   checks:
     name: Checks
