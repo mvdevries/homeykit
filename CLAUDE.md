@@ -66,7 +66,7 @@ app.py, api.py     Homey entry points; they stay in the root
   keep working. Do not delete them, and keep the order of services and characteristics in an accessory the
   same (that determines the `iid`).
 - pyhap chooses the IP address once at start and listens and advertises on it. If the address changes later,
-  the mDNS advertisement is wrong and the server listens on the old address. `services/address_watchdog.py`
+  the mDNS advertisement is wrong and the server listens on the old address. `application/address_watchdog.py`
   checks this every minute and `BridgeSupervisor` then restarts the bridge (the pairing stays, it lives in
   the state file).
 - Old setting keys (`aangeboden`, `aids`, `bridge_naam`, `start_vertraging_aan`,
