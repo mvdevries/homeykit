@@ -15,18 +15,18 @@
     });
   }
 
+  async function applyBridgeName(bridgeName) {
+    ui.settingsState.set(
+      await ui.callApi("PUT", "/settings/bridge-name", { bridge_name: bridgeName }),
+    );
+    fillFromSettings();
+  }
+
   async function saveBridgeName(bridgeName) {
-    ui.toast.showSaving();
-    try {
-      ui.settingsState.set(
-        await ui.callApi("PUT", "/settings/bridge-name", { bridge_name: bridgeName }),
-      );
-      fillFromSettings();
-      ui.toast.showSaved();
-      ui.pairingPage.refresh();
-    } catch (error) {
-      ui.toast.showError(ui.describeError(error));
-    }
+    await ui.saveWithToast(function () {
+      return applyBridgeName(bridgeName);
+    });
+    ui.pairingPage.refresh();
   }
 
   ui.bridgeNamePage = {

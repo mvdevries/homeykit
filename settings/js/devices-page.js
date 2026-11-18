@@ -67,13 +67,14 @@
   }
 
   async function saveExposedDevices() {
-    try {
-      await ui.callApi("PUT", "/devices/exposed", { exposed_device_ids: getExposedDeviceIds() });
-      ui.toast.showSaved();
-    } catch (error) {
-      ui.toast.showError(ui.translate("toast.saveFailed"));
-      loadDevices();
-    }
+    await ui.saveWithToast(
+      function () {
+        return ui.callApi("PUT", "/devices/exposed", {
+          exposed_device_ids: getExposedDeviceIds(),
+        });
+      },
+      { errorText: ui.translate("toast.saveFailed"), onError: loadDevices },
+    );
   }
 
   async function loadDevices() {

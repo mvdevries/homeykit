@@ -1,6 +1,5 @@
-from typing import Any, Never
+from typing import Any
 
 type EndpointQuery = dict[str, str]
 type EndpointParams = dict[str, str]
-type EmptyBody = dict[Never, Never]
 type JsonBody = dict[str, Any]

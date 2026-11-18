@@ -28,4 +28,18 @@
       show(text, "error", ERROR_DURATION_MILLISECONDS);
     },
   };
+
+  ui.saveWithToast = async function (action, options) {
+    const settings = options || {};
+    ui.toast.showSaving();
+    try {
+      const result = await action();
+      ui.toast.showSaved(settings.savedText);
+      return result;
+    } catch (error) {
+      ui.toast.showError(settings.errorText || ui.describeError(error));
+      if (settings.onError) settings.onError(error);
+      return undefined;
+    }
+  };
 })((window.HomeykitUi = window.HomeykitUi || {}));

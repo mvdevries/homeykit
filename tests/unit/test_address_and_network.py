@@ -2,8 +2,8 @@ import asyncio
 import socket
 
 import pytest
-from homeykit.network import local_address
-from homeykit.services.address_watchdog import AddressWatchdog
+from homeykit.application.address_watchdog import AddressWatchdog
+from homeykit.infrastructure import local_address
 
 
 class FakeSocket:

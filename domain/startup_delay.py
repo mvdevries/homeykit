@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ..config.bridge_defaults import STARTUP_DELAY_MAX_SECONDS
+from .defaults import STARTUP_DELAY_MAX_SECONDS
 from .errors import STARTUP_DELAY_OUT_OF_RANGE, SettingsValidationError
 
 

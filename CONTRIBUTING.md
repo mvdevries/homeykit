@@ -36,7 +36,7 @@ Log in once with `npx homey login` and pick a Homey with `npx homey select`.
 2. Keep the code style of the project:
    - small functions that do one thing, with descriptive names (too verbose is better than not clear enough)
    - **no comments or docstrings in code**: explain in the pull request or the README instead
-   - layers only use layers below them (see `CLAUDE.md` for the layout)
+   - dependencies point inwards: `domain`, `application`, `infrastructure` (see `CLAUDE.md` for the layout)
 3. Add tests. Unit tests for logic, integration tests for the bridge and services, end-to-end tests for the
    settings page. Test devices come from `tests/support/sample_devices.py` and stay generic.
 4. Run everything locally:

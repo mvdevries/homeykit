@@ -13,10 +13,13 @@ pytestmark = pytest.mark.integration
 SNAPSHOT_PATH = Path(__file__).parent / "snapshots" / "accessories.json"
 
 
+def running_hap_bridge(app):
+    return app.container.pairing_service._bridge_service.running_bridge
+
+
 def accessory_for(app, device_id):
-    bridge = app.container.bridge_supervisor._bridge_service.running_bridge.bridge
-    sync = app.container.device_sync_service
-    return sync._accessories_by_device_id[device_id], bridge
+    hap_bridge = running_hap_bridge(app)
+    return hap_bridge._accessories_by_device_id[device_id], hap_bridge._bridge
 
 
 def characteristic_of(accessory, name):
@@ -34,7 +37,7 @@ async def expose(app, device_ids):
 
 
 async def write_from_homekit(app, accessory, characteristic, value):
-    app.container.bridge_supervisor._bridge_service.running_bridge.driver.set_characteristics(
+    running_hap_bridge(app)._driver.set_characteristics(
         {
             "characteristics": [
                 {
@@ -148,7 +151,7 @@ async def test_first_sync_failure_does_not_stop_the_bridge(tmp_path):
 
 
 def read_hap_description(app):
-    bridge = app.container.bridge_supervisor._bridge_service.running_bridge.bridge
+    bridge = running_hap_bridge(app)._bridge
     return json.loads(json.dumps(_accessories(bridge)))
 
 

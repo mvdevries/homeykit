@@ -1,4 +1,4 @@
-from ..config.bridge_defaults import BRIDGE_NAME_MAX_LENGTH
+from .defaults import BRIDGE_NAME_MAX_LENGTH
 from .errors import BRIDGE_NAME_TOO_LONG, SettingsValidationError
 
 

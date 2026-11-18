@@ -1,19 +1,18 @@
 from homey import app
 
-from .repositories.legacy_settings_migration import LegacySettingsMigration
-from .services.service_container import ServiceContainer, build_service_container
+from .container import ServiceContainer, build_service_container
 
 
 class App(app.App):
     services: ServiceContainer | None = None
 
     async def on_init(self) -> None:
-        await LegacySettingsMigration(self.homey.settings).migrate_all_legacy_keys()
         self.services = build_service_container(
             settings=self.homey.settings,
             token_source=self.homey.api,
             log=self.log,
         )
+        await self.services.legacy_settings_migration.migrate_all_legacy_keys()
         self.services.address_watchdog.start()
         await self.services.bridge_supervisor.start()
 
