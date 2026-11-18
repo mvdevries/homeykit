@@ -1,0 +1,18 @@
+{
+  "0.1.0": {
+    "en": "First test release: HomeKit bridge for lights, sockets, switches and sensors, with a settings page for pairing, device selection, bridge name and start delay.",
+    "nl": "Eerste testversie: HomeKit-bridge voor lampen, stopcontacten, schakelaars en sensoren, met een instellingenpagina voor koppelen, apparaatkeuze, bridgenaam en opstartvertraging."
+  },
+  "0.1.1": {
+    "en": "Settings fully translated (English and Dutch), complete manifest and store texts, clearer README and a corrected pairing label.",
+    "nl": "Instellingen volledig vertaald (Engels en Nederlands), compleet manifest en winkelteksten, duidelijkere README en een verbeterd koppellabel."
+  },
+  "0.1.2": {
+    "en": "Pincode: chosen randomly on first start, with a new settings page to set your own code or generate a new random one.",
+    "nl": "Pincode: willekeurig gekozen bij de eerste start, met een nieuwe instellingenpagina om zelf een code in te stellen of een nieuwe willekeurige code te maken."
+  },
+  "0.1.3": {
+    "en": "The app now watches the IP address of your Homey and restarts the bridge on the new address if it changes, and waits for a network address at startup.",
+    "nl": "De app bewaakt nu het IP-adres van je Homey en herstart de bridge op het nieuwe adres als dat verandert, en wacht bij het opstarten op een netwerkadres."
+  }
+}
