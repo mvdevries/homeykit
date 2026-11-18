@@ -1,7 +1,8 @@
 [project]
 name = "homeykit"
-version = "0.1.5"
+version = "0.1.6"
 requires-python = ">=3.14"
+license = "MIT"
 dependencies = [
     "HAP-python>=5.2.0",
     "base36>=0.1.1",

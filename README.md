@@ -126,10 +126,13 @@ HOMEY_HEADLESS=1 npx homey app publish
 This needs a changelog entry for the current version in `.homeychangelog.json` and a `README.txt`. Publishing
 it as a test version afterwards is done in [tools.developer.homey.app](https://tools.developer.homey.app).
 
+## License
+
+Homeykit is released under the [MIT License](LICENSE). Its runtime dependencies are Apache-2.0, BSD, MIT, MPL-2.0
+and LGPL-2.1 (zeroconf) licensed and are installed as packages, not copied into this repository.
+
 ## Sources
 
-- The icon and brand colour were taken from HomeKitty (`name.klep.homekitty`) for private use.
-  That repository has no licence; ask the author for permission before making this public.
 - The store images and the header are made from the photo
   ["Turned on gray flat screen smart TV"](https://www.pexels.com/photo/turned-on-gray-flat-screen-smart-tv-1571459/)
   from Pexels, used under the [Pexels License](https://www.pexels.com/license/) (free for commercial use, no
