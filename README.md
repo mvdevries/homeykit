@@ -11,9 +11,21 @@ De code staat in lagen. Een laag gebruikt alleen lagen die onder hem staan.
 
 ```
 app.py                  App: bouwt de services en start en stopt de bridge
-config/                 Vaste waarden: poorten, standaardnamen, limieten
-domain/                 Gegevensmodellen en regels zonder I/O
+api.py                  Routes van de app-API, geëxporteerd voor Homey
+config/                 Vaste waarden: poorten, standaardnamen, instellingssleutels
+domain/                 Gegevensmodellen en regels zonder I/O (pincode, fouten)
 storage/                Lezen en schrijven van de Homey-instellingen
+homekit/                HomeKit-specifiek: koppel-URI en QR-code
+services/               De logica: één klasse per bestand
+  bridge_service.py       Maakt, publiceert en stopt de HomeKit-bridge
+  bridge_supervisor.py    Bepaalt wanneer de bridge start en stopt
+  pairing_service.py      Gegevens om te koppelen: QR-code, pincode, status
+  pincode_service.py      Bewaart de willekeurige pincode
+  service_container.py    Stelt alle services samen
+routes/                 Dunne routes die de services aanroepen
+settings/               Instellingenpagina (HTML, css/ en js/ per onderdeel)
+locales/                Vertalingen (en.json, nl.json)
+assets/                 Icoon en winkelafbeeldingen
 ```
 
 ## Ontwikkelen
