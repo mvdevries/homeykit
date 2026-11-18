@@ -22,5 +22,9 @@
   "0.1.5": {
     "en": "Internal cleanup of the code structure; nothing changes functionally.",
     "nl": "Interne opruiming van de codestructuur; functioneel verandert er niets."
+  },
+  "0.1.6": {
+    "en": "New app icon and store images.",
+    "nl": "Nieuw app-icoon en nieuwe winkelafbeeldingen."
   }
 }
