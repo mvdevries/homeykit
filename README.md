@@ -113,9 +113,10 @@ The version is determined by the release pipeline from the branch name of the pu
 | `feature/…`   | minor        |
 | `fix/…`       | patch        |
 
-Merge with a merge commit (not squash), so the branch name is in the history. The title of the pull request
-becomes the changelog text. The version in the manifest is replaced during the run and is not committed.
-The pipeline starts from the latest `v<version>` tag.
+Pull requests are squash merged. The pipeline looks up the pull request of the merged commit, takes its branch
+name and raises the latest `v<version>` tag by that kind of version. The title of the pull request becomes the
+squash commit title and the changelog text. The version in the manifest is replaced during the run and is not
+committed.
 
 ### Publishing a test version by hand
 
