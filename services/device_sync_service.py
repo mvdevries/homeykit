@@ -8,8 +8,8 @@ from ..domain.log_function import LogFunction
 from ..gateways.homey_devices_gateway import HomeyDevicesGateway
 from ..homekit.homey_accessory import HomeyAccessory
 from ..homekit.service_profiles import ServiceProfile, build_service_profiles
-from ..storage.accessory_id_registry import AccessoryIdRegistry
-from ..storage.exposed_devices_store import ExposedDevicesStore
+from ..repositories.accessory_id_repository import AccessoryIdRepository
+from ..repositories.exposed_devices_repository import ExposedDevicesRepository
 from .bridge_service import RunningBridge
 
 
@@ -18,14 +18,14 @@ class DeviceSyncService:
         self,
         *,
         devices_gateway: HomeyDevicesGateway,
-        exposed_devices_store: ExposedDevicesStore,
-        accessory_id_registry: AccessoryIdRegistry,
+        exposed_devices_repository: ExposedDevicesRepository,
+        accessory_id_repository: AccessoryIdRepository,
         log: LogFunction,
         sync_interval_seconds: float = DEVICE_SYNC_INTERVAL_SECONDS,
     ) -> None:
         self._devices_gateway = devices_gateway
-        self._exposed_devices_store = exposed_devices_store
-        self._accessory_id_registry = accessory_id_registry
+        self._exposed_devices_repository = exposed_devices_repository
+        self._accessory_id_repository = accessory_id_repository
         self._log = log
         self._sync_interval_seconds = sync_interval_seconds
         self._accessories_by_device_id: dict[str, HomeyAccessory] = {}
@@ -68,7 +68,7 @@ class DeviceSyncService:
     async def save_exposed_device_ids_and_synchronize(
         self, device_ids: Iterable[str]
     ) -> None:
-        await self._exposed_devices_store.save_exposed_device_ids(device_ids)
+        await self._exposed_devices_repository.save_exposed_device_ids(device_ids)
         if self._running_bridge is not None:
             await self.synchronize_once()
 
@@ -85,7 +85,7 @@ class DeviceSyncService:
         refresh_task.add_done_callback(self._background_tasks.discard)
 
     async def _synchronize_with_devices(self, devices: dict[str, HomeyDevice]) -> None:
-        exposed_ids = self._exposed_devices_store.read_exposed_device_ids()
+        exposed_ids = self._exposed_devices_repository.read_exposed_device_ids()
         removed_any = self._remove_accessories_that_should_not_exist(devices, exposed_ids)
         added_any = await self._add_missing_accessories(devices, exposed_ids)
         self._update_existing_accessories(devices)
@@ -136,7 +136,7 @@ class DeviceSyncService:
         self, device: HomeyDevice, profiles: tuple[ServiceProfile, ...]
     ) -> None:
         running_bridge = self._require_running_bridge()
-        accessory_id = await self._accessory_id_registry.get_or_assign_accessory_id(
+        accessory_id = await self._accessory_id_repository.get_or_assign_accessory_id(
             device.id
         )
         accessory = HomeyAccessory(
