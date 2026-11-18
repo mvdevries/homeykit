@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.next.outputs.version }}
+      previous: ${{ steps.next.outputs.current-v-version }}
       changelog: ${{ steps.pull-request.outputs.title }}
     steps:
       - uses: actions/checkout@v4
@@ -104,8 +105,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version.outputs.version }}
           CHANGELOG: ${{ needs.version.outputs.changelog }}
+          PREVIOUS_TAG: ${{ needs.version.outputs.previous }}
           UPLOAD_URL: ${{ steps.publish.outputs.url }}
         run: |
           gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" \
+            --generate-notes --notes-start-tag "$PREVIOUS_TAG" \
             --notes "$CHANGELOG"$'\n\n'"Build: $UPLOAD_URL"
           echo "Version $VERSION uploaded: $UPLOAD_URL" >> "$GITHUB_STEP_SUMMARY"
