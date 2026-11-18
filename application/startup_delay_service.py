@@ -1,8 +1,6 @@
 from ..domain.defaults import STARTUP_DELAY_DEFAULT_SECONDS
 from ..domain.startup_delay import StartupDelay, validate_startup_delay_seconds
-from ..infrastructure.repositories.startup_delay_repository import (
-    StartupDelayRepository,
-)
+from .ports import StartupDelayRepository
 
 
 class StartupDelayService:

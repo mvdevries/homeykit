@@ -1,7 +1,7 @@
 from typing import Any
 
-from ..infrastructure.homekit.bridge_service import BridgeService
 from .bridge_name_service import BridgeNameService
+from .bridge_service import BridgeService
 from .bridge_supervisor import BridgeSupervisor
 from .pincode_service import PincodeService
 from .startup_delay_service import StartupDelayService

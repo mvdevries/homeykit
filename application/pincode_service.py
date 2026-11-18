@@ -1,6 +1,6 @@
 from ..domain.errors import SettingsValidationError
 from ..domain.pincode import generate_random_pincode, normalize_pincode_input
-from ..infrastructure.repositories.pincode_repository import PincodeRepository
+from .ports import PincodeRepository
 
 
 class PincodeService:

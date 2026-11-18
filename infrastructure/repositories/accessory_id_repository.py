@@ -1,12 +1,12 @@
 from .setting_keys import ACCESSORY_IDS_SETTING_KEY
-from .settings_storage import JsonSettingsAccess
+from .settings_access import SettingsAccess
 
 FIRST_ASSIGNABLE_ACCESSORY_ID = 2
 RESERVED_ACCESSORY_IDS = frozenset({1, 7})
 
 
 class AccessoryIdRepository:
-    def __init__(self, settings_access: JsonSettingsAccess) -> None:
+    def __init__(self, settings_access: SettingsAccess) -> None:
         self._settings_access = settings_access
 
     async def get_or_assign_accessory_id(self, device_id: str) -> int:

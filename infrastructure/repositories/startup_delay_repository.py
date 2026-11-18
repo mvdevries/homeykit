@@ -2,22 +2,23 @@ from .setting_keys import (
     STARTUP_DELAY_ENABLED_SETTING_KEY,
     STARTUP_DELAY_SECONDS_SETTING_KEY,
 )
-from .settings_storage import SettingsStorage
+from .settings_access import SettingsAccess
 
 
 class StartupDelayRepository:
-    def __init__(self, storage: SettingsStorage) -> None:
-        self._storage = storage
+    def __init__(self, settings_access: SettingsAccess) -> None:
+        self._settings_access = settings_access
 
     def read_enabled(self) -> bool:
-        return bool(self._storage.get(STARTUP_DELAY_ENABLED_SETTING_KEY))
+        return self._settings_access.read_bool(STARTUP_DELAY_ENABLED_SETTING_KEY)
 
     def read_seconds(self) -> int | None:
-        stored_value = self._storage.get(STARTUP_DELAY_SECONDS_SETTING_KEY)
-        if isinstance(stored_value, bool) or not isinstance(stored_value, (int, float)):
-            return None
-        return int(stored_value)
+        return self._settings_access.read_int(STARTUP_DELAY_SECONDS_SETTING_KEY)
 
     async def save(self, enabled: bool, seconds: int) -> None:
-        await self._storage.set(STARTUP_DELAY_ENABLED_SETTING_KEY, bool(enabled))
-        await self._storage.set(STARTUP_DELAY_SECONDS_SETTING_KEY, int(seconds))
+        await self._settings_access.write_raw(
+            STARTUP_DELAY_ENABLED_SETTING_KEY, bool(enabled)
+        )
+        await self._settings_access.write_raw(
+            STARTUP_DELAY_SECONDS_SETTING_KEY, int(seconds)
+        )

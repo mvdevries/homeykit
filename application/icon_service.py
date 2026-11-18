@@ -1,16 +1,15 @@
 import asyncio
 import base64
+from collections.abc import Iterable
 from dataclasses import dataclass
-
-import httpx
 
 from ..domain.defaults import (
     ICON_DOWNLOAD_PAUSE_SECONDS,
     ICON_MAX_SVG_CHARACTERS,
 )
-from ..infrastructure.gateways.homey_devices_gateway import HomeyDevicesGateway
-
-HTTP_TOO_MANY_REQUESTS = 429
+from ..domain.errors import HomeyRateLimitedError, HomeyRequestFailedError
+from ..domain.homey_device import HomeyDevice
+from .ports import DevicesGateway
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,7 +29,7 @@ def convert_svg_to_data_uri(svg: str) -> str | None:
 
 
 class IconService:
-    def __init__(self, *, devices_gateway: HomeyDevicesGateway) -> None:
+    def __init__(self, *, devices_gateway: DevicesGateway) -> None:
         self._devices_gateway = devices_gateway
         self._data_uris_by_icon_id: dict[str, str] = {}
         self._download_lock = asyncio.Lock()
@@ -39,14 +38,16 @@ class IconService:
         devices = await self._devices_gateway.fetch_all_devices()
         return await self.load_icons_for_devices(devices.values())
 
-    async def load_icons_for_devices(self, devices) -> IconLoadResult:
+    async def load_icons_for_devices(
+        self, devices: Iterable[HomeyDevice]
+    ) -> IconLoadResult:
         requested_icons = self._collect_requested_icons(devices)
         async with self._download_lock:
             await self._download_uncached_icons(requested_icons)
         return self._build_result(requested_icons)
 
     @staticmethod
-    def _collect_requested_icons(devices) -> dict[str, str]:
+    def _collect_requested_icons(devices: Iterable[HomeyDevice]) -> dict[str, str]:
         return {
             device.icon_id: device.icon_path
             for device in devices
@@ -65,9 +66,9 @@ class IconService:
     async def _download_icon(self, icon_id: str, icon_path: str) -> bool:
         try:
             svg = await self._devices_gateway.fetch_icon_svg(icon_path)
-        except httpx.HTTPStatusError as error:
-            return error.response.status_code != HTTP_TOO_MANY_REQUESTS
-        except httpx.HTTPError:
+        except HomeyRateLimitedError:
+            return False
+        except HomeyRequestFailedError:
             return True
         self._cache_icon(icon_id, svg)
         return True

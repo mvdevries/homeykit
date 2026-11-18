@@ -1,6 +1,10 @@
 from collections.abc import Mapping
 from typing import Any
 
+import httpx
+
+from ...domain.defaults import HTTP_TOO_MANY_REQUESTS
+from ...domain.errors import HomeyRateLimitedError, HomeyRequestFailedError
 from ...domain.homey_device import HomeyDevice
 from .homey_device_parser import parse_homey_device
 from .homey_web_api import HomeyWebApiClient
@@ -36,7 +40,14 @@ class HomeyDevicesGateway:
 
     async def fetch_icon_svg(self, icon_path: str) -> str:
         relative_path = icon_path.removeprefix(API_PATH_PREFIX)
-        return await self._web_api_client.get_text(relative_path)
+        try:
+            return await self._web_api_client.get_text(relative_path)
+        except httpx.HTTPStatusError as error:
+            if error.response.status_code == HTTP_TOO_MANY_REQUESTS:
+                raise HomeyRateLimitedError(str(error)) from error
+            raise HomeyRequestFailedError(str(error)) from error
+        except httpx.HTTPError as error:
+            raise HomeyRequestFailedError(str(error)) from error
 
     async def fetch_homey_name(self) -> str | None:
         name = await self._web_api_client.get_json(SYSTEM_NAME_PATH)

@@ -7,14 +7,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 from homeykit import container as service_container_module
-from homeykit.application import address_watchdog as address_watchdog_module
-from homeykit.application import bridge_supervisor as bridge_supervisor_module
 from homeykit.container import (
     ServiceContainer,
     build_service_container,
 )
 from homeykit.infrastructure.gateways.homey_web_api import HomeyWebApiClient
-from homeykit.infrastructure.homekit import bridge_service as bridge_service_module
+from homeykit.infrastructure.homekit import hap_bridge as hap_bridge_module
 
 from tests.support.fake_homey_api import FakeHomeyApi, FakeTokenSource
 from tests.support.fixtures import InMemorySettings, LogRecorder, find_free_tcp_port
@@ -49,19 +47,16 @@ async def running_app(
         HomeyWebApiClient, transport=fake_api.build_transport()
     )
     with (
-        patch.object(bridge_service_module, "BRIDGE_PORT", port),
+        patch.object(hap_bridge_module, "BRIDGE_PORT", port),
         patch.object(
-            bridge_service_module,
+            hap_bridge_module,
             "BRIDGE_STATE_FILE_PATH",
             str(state_directory / "homeykit.state"),
         ),
         patch.object(
-            bridge_supervisor_module,
+            service_container_module,
             "find_local_ip_address",
             lambda: network_address[0],
-        ),
-        patch.object(
-            address_watchdog_module, "find_local_ip_address", lambda: network_address[0]
         ),
         patch.object(
             service_container_module, "HomeyWebApiClient", client_with_fake_transport

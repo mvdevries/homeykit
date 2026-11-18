@@ -1,11 +1,11 @@
 from collections.abc import Iterable
 
 from .setting_keys import EXPOSED_DEVICE_IDS_SETTING_KEY
-from .settings_storage import JsonSettingsAccess
+from .settings_access import SettingsAccess
 
 
 class ExposedDevicesRepository:
-    def __init__(self, settings_access: JsonSettingsAccess) -> None:
+    def __init__(self, settings_access: SettingsAccess) -> None:
         self._settings_access = settings_access
 
     def read_exposed_device_ids(self) -> frozenset[str]:

@@ -1,8 +1,8 @@
 from ..domain.bridge_name import normalize_bridge_name
 from ..domain.defaults import BRIDGE_DEFAULT_NAME
-from ..infrastructure.gateways.homey_devices_gateway import HomeyDevicesGateway
-from ..infrastructure.repositories.bridge_name_repository import BridgeNameRepository
+from .error_logging import run_logging_errors
 from .log_function import LogFunction
+from .ports import BridgeNameRepository, DevicesGateway
 
 
 class BridgeNameService:
@@ -10,7 +10,7 @@ class BridgeNameService:
         self,
         *,
         bridge_name_repository: BridgeNameRepository,
-        devices_gateway: HomeyDevicesGateway,
+        devices_gateway: DevicesGateway,
         log: LogFunction,
     ) -> None:
         self._bridge_name_repository = bridge_name_repository
@@ -23,11 +23,11 @@ class BridgeNameService:
         return self._default_bridge_name
 
     async def load_default_name_from_homey(self) -> None:
-        try:
-            homey_name = await self._devices_gateway.fetch_homey_name()
-        except Exception as error:
-            self._log(f"Reading the name of Homey failed: {error}")
-            return
+        homey_name = await run_logging_errors(
+            self._log,
+            "Reading the name of Homey failed",
+            self._devices_gateway.fetch_homey_name,
+        )
         if homey_name:
             self._default_bridge_name = homey_name
 

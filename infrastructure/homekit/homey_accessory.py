@@ -1,4 +1,3 @@
-import asyncio
 from collections.abc import Callable
 from typing import Any
 
@@ -8,6 +7,8 @@ from pyhap.characteristic import Characteristic
 from pyhap.const import CATEGORY_OTHER
 from pyhap.service import Service
 
+from ...application.background_tasks import TaskSet
+from ...application.error_logging import run_logging_errors
 from ...application.log_function import LogFunction
 from ...domain.defaults import ACCESSORY_NAME_MAX_LENGTH
 from ...domain.homey_device import HomeyDevice
@@ -41,7 +42,7 @@ class HomeyAccessory(Accessory):
         self._characteristics_by_capability: dict[
             str, list[tuple[Characteristic, Converter]]
         ] = {}
-        self._pending_writes: set[asyncio.Task[None]] = set()
+        self._pending_writes = TaskSet()
         self._configure_information_service(device)
         self._add_services_from_profiles(profiles)
         self.update_from_device(device)
@@ -88,23 +89,24 @@ class HomeyAccessory(Accessory):
         return set_value_from_homekit
 
     def _start_capability_write(self, binding: CapabilityBinding, value: Any) -> None:
-        write_task = asyncio.get_running_loop().create_task(
-            self._write_capability(binding, value)
-        )
-        self._pending_writes.add(write_task)
-        write_task.add_done_callback(self._pending_writes.discard)
+        self._pending_writes.start(self._write_capability(binding, value))
 
     async def _write_capability(self, binding: CapabilityBinding, value: Any) -> None:
+        was_written = await run_logging_errors(
+            self._log,
+            f"Writing to '{self.homey_device.name}' failed",
+            lambda: self._write_to_homey(binding, value),
+        )
+        if was_written:
+            self._on_capability_written(self.homey_device.id)
+
+    async def _write_to_homey(self, binding: CapabilityBinding, value: Any) -> bool:
         assert binding.to_homey is not None
-        try:
-            await self._write_prerequisite_capabilities(binding)
-            await self._devices_gateway.set_capability_value(
-                self.homey_device.id, binding.capability_id, binding.to_homey(value)
-            )
-        except Exception as error:
-            self._log(f"Writing to '{self.homey_device.name}' failed: {error}")
-            return
-        self._on_capability_written(self.homey_device.id)
+        await self._write_prerequisite_capabilities(binding)
+        await self._devices_gateway.set_capability_value(
+            self.homey_device.id, binding.capability_id, binding.to_homey(value)
+        )
+        return True
 
     async def _write_prerequisite_capabilities(
         self, binding: CapabilityBinding
@@ -154,6 +156,4 @@ class HomeyAccessory(Accessory):
             )
 
     async def cancel_pending_writes(self) -> None:
-        for write_task in list(self._pending_writes):
-            write_task.cancel()
-        await asyncio.gather(*self._pending_writes, return_exceptions=True)
+        await self._pending_writes.cancel_all()

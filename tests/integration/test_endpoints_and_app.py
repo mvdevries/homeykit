@@ -103,13 +103,12 @@ async def test_app_lifecycle_migrates_legacy_settings(
     ) as scope:
         port, state = scope.port, tmp_path / "homeykit.state"
     with (
-        patch("homeykit.infrastructure.homekit.bridge_service.BRIDGE_PORT", port),
+        patch("homeykit.infrastructure.homekit.hap_bridge.BRIDGE_PORT", port),
         patch(
-            "homeykit.infrastructure.homekit.bridge_service.BRIDGE_STATE_FILE_PATH",
+            "homeykit.infrastructure.homekit.hap_bridge.BRIDGE_STATE_FILE_PATH",
             str(state),
         ),
-        patch("homeykit.application.bridge_supervisor.find_local_ip_address", network),
-        patch("homeykit.application.address_watchdog.find_local_ip_address", network),
+        patch("homeykit.container.find_local_ip_address", network),
         patch.object(
             service_container_module,
             "HomeyWebApiClient",

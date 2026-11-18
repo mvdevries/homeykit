@@ -1,10 +1,8 @@
+from collections.abc import Mapping
+
 from ..domain.device_row import DeviceRow
 from ..domain.homey_device import HomeyDevice
-from ..infrastructure.gateways.homey_devices_gateway import HomeyDevicesGateway
-from ..infrastructure.homekit.service_profiles import is_device_supported
-from ..infrastructure.repositories.exposed_devices_repository import (
-    ExposedDevicesRepository,
-)
+from .ports import DevicesGateway, DeviceSupport, ExposedDevicesRepository
 
 
 def build_sort_key(row: DeviceRow) -> tuple[bool, str, str]:
@@ -16,10 +14,12 @@ class DeviceOverviewService:
     def __init__(
         self,
         *,
-        devices_gateway: HomeyDevicesGateway,
+        devices_gateway: DevicesGateway,
         exposed_devices_repository: ExposedDevicesRepository,
+        device_support: DeviceSupport,
     ) -> None:
         self._devices_gateway = devices_gateway
+        self._device_support = device_support
         self._exposed_devices_repository = exposed_devices_repository
 
     async def build_device_rows(self) -> list[DeviceRow]:
@@ -32,11 +32,13 @@ class DeviceOverviewService:
         ]
         return sorted(rows, key=build_sort_key)
 
-    @staticmethod
     def _build_row(
-        device: HomeyDevice, zone_names: dict[str, str], exposed_ids: frozenset[str]
+        self,
+        device: HomeyDevice,
+        zone_names: Mapping[str, str],
+        exposed_ids: frozenset[str],
     ) -> DeviceRow:
-        is_supported = is_device_supported(device)
+        is_supported = self._device_support.is_supported(device)
         return DeviceRow(
             id=device.id,
             name=device.name,
