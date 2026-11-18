@@ -4,7 +4,7 @@ import pytest
 from homeykit.endpoints.service_lookup import get_service_container
 
 
-def test_service_lookup_fails_before_the_app_is_ready():
+def test_given_no_services_when_looked_up_then_it_fails_as_not_ready():
     homey = types.SimpleNamespace(app=types.SimpleNamespace(services=None))
 
     with pytest.raises(RuntimeError):
