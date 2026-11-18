@@ -1,0 +1,49 @@
+:root {
+  --accent: #2f7bf2;
+  --line-color: rgba(128, 128, 128, 0.25);
+  --card-background: rgba(128, 128, 128, 0.08);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.page {
+  padding: 4px 0 24px;
+}
+
+.muted {
+  opacity: 0.65;
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.card {
+  background: var(--card-background);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.card-content {
+  padding: 4px 16px 12px;
+}
+
+.section-heading {
+  margin: 18px 16px 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.centered {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.help-text {
+  margin: 8px 0 0;
+}
