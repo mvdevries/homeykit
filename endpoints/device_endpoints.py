@@ -3,7 +3,7 @@ from typing import Any
 from homey.homey import Homey
 
 from ..domain.device_row import DeviceRow
-from .endpoint_types import EmptyBody, JsonBody, EndpointParams, EndpointQuery
+from .endpoint_types import EmptyBody, EndpointParams, EndpointQuery, JsonBody
 from .service_lookup import get_service_container
 
 
@@ -29,7 +29,9 @@ async def set_exposed_devices(
     await services.device_sync_service.save_exposed_device_ids_and_synchronize(
         read_exposed_device_ids(body)
     )
-    return build_devices_payload(await services.device_overview_service.build_device_rows())
+    return build_devices_payload(
+        await services.device_overview_service.build_device_rows()
+    )
 
 
 async def get_icons(

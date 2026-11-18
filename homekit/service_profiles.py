@@ -145,9 +145,7 @@ SENSOR_PROFILES: tuple[tuple[str, ServiceProfile], ...] = (
     ),
     (
         "alarm_motion",
-        build_sensor_profile(
-            "MotionSensor", "alarm_motion", "MotionDetected", to_bool
-        ),
+        build_sensor_profile("MotionSensor", "alarm_motion", "MotionDetected", to_bool),
     ),
     (
         "alarm_contact",

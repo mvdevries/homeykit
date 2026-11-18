@@ -80,6 +80,20 @@ Zonder vragen: dit vereist een changelog voor de huidige versie in `.homeychange
 `README.txt`. Het publiceren als testversie doe je daarna in
 [tools.developer.homey.app](https://tools.developer.homey.app).
 
+### Kwaliteit en pipeline
+
+```
+uv run ruff format .        # formatteren
+uv run ruff check .         # linten
+```
+
+De regels staan in `pyproject.toml`. Bij een pull request draaien lint, formatting, tests (zodra er
+`tests/` is) en een build-validatie (`.github/workflows/pull-request.yml`). Bij een merge naar `main` wordt
+de app geüpload naar Athom (`.github/workflows/publish.yml`); dat vereist het secret `HOMEY_PAT` en een
+nieuwe versie met changelog. Dependabot houdt de GitHub Actions en de Python-pakketten in `pyproject.toml`
+bij. De pakketten in `.homeycompose/app.json` staan zonder versie; `pyproject.toml` bepaalt alleen de
+test- en ontwikkelomgeving.
+
 ## Bronnen
 
 - Icoon en merkkleur zijn overgenomen van HomeKitty (`name.klep.homekitty`) voor privégebruik.

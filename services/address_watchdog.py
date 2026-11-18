@@ -26,7 +26,9 @@ class AddressWatchdog:
 
     def start(self) -> None:
         if self._watch_task is None:
-            self._watch_task = asyncio.get_running_loop().create_task(self._watch_loop())
+            self._watch_task = asyncio.get_running_loop().create_task(
+                self._watch_loop()
+            )
 
     async def stop(self) -> None:
         if self._watch_task is None:

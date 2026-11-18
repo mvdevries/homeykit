@@ -17,6 +17,7 @@ structuur en de commando's.
 - Draai de app alleen op de Homey als Martyn dat vraagt. De app start en stop je als achtergrondtaak
   met `npx homey app run --remote`, en na elke codewijziging herstart je hem. Geen Rex-panelen.
 - Het uploaden en publiceren van een build doe je alleen op uitdrukkelijk verzoek.
+- Formatteer en lint met `uv run ruff format .` en `uv run ruff check .`; de pipeline faalt anders.
 
 ## Structuur
 

@@ -86,7 +86,9 @@ class DeviceSyncService:
 
     async def _synchronize_with_devices(self, devices: dict[str, HomeyDevice]) -> None:
         exposed_ids = self._exposed_devices_repository.read_exposed_device_ids()
-        removed_any = self._remove_accessories_that_should_not_exist(devices, exposed_ids)
+        removed_any = self._remove_accessories_that_should_not_exist(
+            devices, exposed_ids
+        )
         added_any = await self._add_missing_accessories(devices, exposed_ids)
         self._update_existing_accessories(devices)
         self._announce_configuration_change_if_published(removed_any or added_any)
