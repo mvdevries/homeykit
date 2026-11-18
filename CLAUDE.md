@@ -27,7 +27,7 @@ endpoints/         Thin entry points for the Homey API, built with the @endpoint
 settings/          The settings page (HTML, css/ and js/ per concern)
 locales/           Translations: en.json and nl.json
 assets/            Icon, logo and store images
-tests/             unit/, integration/, e2e/ and support/ (sample devices, fake Homey API)
+tests/             unit/, integration/ and e2e/ (Gherkin features and steps), support/ (sample devices, fake Homey API)
 .github/           Workflows (pull request, release, CodeQL) and Dependabot
 .homeycompose/     The app manifest; app.json is generated from it
 ```
