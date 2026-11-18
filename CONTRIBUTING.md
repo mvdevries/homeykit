@@ -75,7 +75,8 @@ uv run pytest tests/unit                # only unit tests
 
 The rules live in `pyproject.toml`.
 
-- **Unit tests** cover the domain rules, conversions, profiles, repositories, gateways and services.
+- **Unit tests** (`tests/unit`, mirroring the layers) cover the domain rules, conversions, profiles, repositories,
+  gateways and services. Their names read `test_given_<state>_when_<action>_then_<result>`.
 - **Integration tests** are Gherkin scenarios (`tests/integration/features`) that run the real HAP-python bridge
   on loopback against a fake Homey API, including a snapshot of the HomeKit description of all supported devices.
 - **End-to-end tests** are Gherkin scenarios (`tests/e2e/features`) that drive the settings page in Chromium

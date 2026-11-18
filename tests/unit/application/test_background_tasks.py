@@ -2,34 +2,19 @@ import asyncio
 
 import pytest
 from homeykit.application.background_tasks import PeriodicTask, TaskSet, cancel_task
-from homeykit.application.error_logging import run_logging_errors
-
-
-class TestRunLoggingErrors:
-    async def test_returns_the_result_of_the_action(self, log):
-        async def action():
-            return 42
-
-        assert await run_logging_errors(log, "Failed", action) == 42
-        assert log.messages == []
-
-    async def test_logs_the_error_and_returns_none(self, log):
-        async def action():
-            raise ValueError("boom")
-
-        assert await run_logging_errors(log, "Failed", action) is None
-        assert log.messages == ["Failed: boom"]
 
 
 class TestCancelTask:
-    async def test_cancels_a_running_task_without_raising(self):
+    async def test_given_a_running_task_when_cancelled_then_nothing_is_raised(self):
         task = asyncio.get_running_loop().create_task(asyncio.sleep(60))
+
         await cancel_task(task)
+
         assert task.cancelled()
 
 
 class TestTaskSet:
-    async def test_runs_and_forgets_finished_tasks(self):
+    async def test_given_a_short_task_when_started_then_it_runs_to_the_end(self):
         task_set = TaskSet()
         results = []
 
@@ -37,15 +22,18 @@ class TestTaskSet:
             results.append("done")
 
         await task_set.start(work())
+
         assert results == ["done"]
 
-    async def test_cancel_all_stops_pending_tasks(self):
+    async def test_given_pending_tasks_when_cancelled_then_all_of_them_stop(self):
         task_set = TaskSet()
         tasks = [task_set.start(asyncio.sleep(60)) for _ in range(3)]
+
         await task_set.cancel_all()
+
         assert all(task.cancelled() for task in tasks)
 
-    async def test_cancel_all_without_tasks_is_fine(self):
+    async def test_given_no_tasks_when_cancelled_then_nothing_happens(self):
         await TaskSet().cancel_all()
 
 
@@ -67,26 +55,37 @@ class TestPeriodicTask:
             failure_message="Periodic action failed",
         )
 
-    async def test_runs_the_action_repeatedly_until_stopped(self, calls, log):
+    async def test_given_a_started_task_when_stopped_then_it_stops_calling_the_action(
+        self, calls, log
+    ):
         periodic_task = self.build(calls, log)
+
         periodic_task.start()
         periodic_task.start()
-        assert periodic_task.is_running
+        running = periodic_task.is_running
         await asyncio.sleep(0.06)
         await periodic_task.stop()
         count_after_stop = len(calls)
         await asyncio.sleep(0.03)
+
+        assert running
         assert count_after_stop >= 2
         assert len(calls) == count_after_stop
         assert not periodic_task.is_running
 
-    async def test_keeps_running_after_a_failure(self, calls, log):
+    async def test_given_a_failing_action_when_running_then_it_keeps_going_and_logs(
+        self, calls, log
+    ):
         periodic_task = self.build(calls, log, fail=True)
+
         periodic_task.start()
         await asyncio.sleep(0.06)
         await periodic_task.stop()
+
         assert len(calls) >= 2
         assert log.contains("Periodic action failed: boom")
 
-    async def test_stop_without_start_is_fine(self, calls, log):
+    async def test_given_a_task_that_never_started_when_stopped_then_nothing_happens(
+        self, calls, log
+    ):
         await self.build(calls, log).stop()

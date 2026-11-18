@@ -50,5 +50,7 @@ def violations(layer: str, forbidden_layers: tuple[str, ...]) -> list[str]:
         ("application", FORBIDDEN_IN_APPLICATION),
     ],
 )
-def test_inner_layers_do_not_depend_on_outer_layers(layer, forbidden_layers):
+def test_given_an_inner_layer_when_its_imports_are_read_then_no_outer_layer_is_used(
+    layer, forbidden_layers
+):
     assert violations(layer, forbidden_layers) == []
