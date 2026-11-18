@@ -2,7 +2,7 @@ from ..config.setting_keys import PINCODE_SETTING_KEY
 from .settings_storage import SettingsStorage
 
 
-class PincodeStore:
+class PincodeRepository:
     def __init__(self, storage: SettingsStorage) -> None:
         self._storage = storage
 

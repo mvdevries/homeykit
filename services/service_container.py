@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from ..domain.log_function import LogFunction
 from ..gateways.homey_devices_gateway import HomeyDevicesGateway
 from ..gateways.homey_web_api import HomeyWebApiClient, TokenSource
-from ..storage.accessory_id_registry import AccessoryIdRegistry
-from ..storage.bridge_name_store import BridgeNameStore
-from ..storage.exposed_devices_store import ExposedDevicesStore
-from ..storage.pincode_store import PincodeStore
-from ..storage.settings_storage import JsonSettingsAccess, SettingsStorage
-from ..storage.startup_delay_store import StartupDelayStore
+from ..repositories.accessory_id_repository import AccessoryIdRepository
+from ..repositories.bridge_name_repository import BridgeNameRepository
+from ..repositories.exposed_devices_repository import ExposedDevicesRepository
+from ..repositories.pincode_repository import PincodeRepository
+from ..repositories.settings_storage import JsonSettingsAccess, SettingsStorage
+from ..repositories.startup_delay_repository import StartupDelayRepository
 from .address_watchdog import AddressWatchdog
 from .bridge_name_service import BridgeNameService
 from .bridge_service import BridgeService
@@ -43,21 +43,21 @@ def build_service_container(
     settings_access = JsonSettingsAccess(settings)
     web_api_client = HomeyWebApiClient(token_source)
     devices_gateway = HomeyDevicesGateway(web_api_client)
-    exposed_devices_store = ExposedDevicesStore(settings_access)
-    pincode_service = PincodeService(PincodeStore(settings))
+    exposed_devices_repository = ExposedDevicesRepository(settings_access)
+    pincode_service = PincodeService(PincodeRepository(settings))
     bridge_service = BridgeService(pincode_service=pincode_service, log=log)
     device_sync_service = DeviceSyncService(
         devices_gateway=devices_gateway,
-        exposed_devices_store=exposed_devices_store,
-        accessory_id_registry=AccessoryIdRegistry(settings_access),
+        exposed_devices_repository=exposed_devices_repository,
+        accessory_id_repository=AccessoryIdRepository(settings_access),
         log=log,
     )
     bridge_name_service = BridgeNameService(
-        bridge_name_store=BridgeNameStore(settings),
+        bridge_name_repository=BridgeNameRepository(settings),
         devices_gateway=devices_gateway,
         log=log,
     )
-    startup_delay_service = StartupDelayService(StartupDelayStore(settings))
+    startup_delay_service = StartupDelayService(StartupDelayRepository(settings))
     bridge_supervisor = BridgeSupervisor(
         bridge_service=bridge_service,
         device_sync_service=device_sync_service,
@@ -74,7 +74,7 @@ def build_service_container(
         device_sync_service=device_sync_service,
         device_overview_service=DeviceOverviewService(
             devices_gateway=devices_gateway,
-            exposed_devices_store=exposed_devices_store,
+            exposed_devices_repository=exposed_devices_repository,
         ),
         icon_service=IconService(devices_gateway=devices_gateway),
         settings_service=SettingsService(

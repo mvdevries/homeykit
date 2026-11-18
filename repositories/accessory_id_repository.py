@@ -5,7 +5,7 @@ FIRST_ASSIGNABLE_ACCESSORY_ID = 2
 RESERVED_ACCESSORY_IDS = frozenset({1, 7})
 
 
-class AccessoryIdRegistry:
+class AccessoryIdRepository:
     def __init__(self, settings_access: JsonSettingsAccess) -> None:
         self._settings_access = settings_access
 
