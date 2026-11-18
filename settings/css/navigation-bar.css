@@ -1,0 +1,27 @@
+.nav-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 8px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 2px;
+  margin-left: -6px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.intro-text {
+  margin: 4px 0 12px;
+}

@@ -1,0 +1,112 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chip {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--card-background);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+
+.device-summary {
+  margin: 14px 0 8px;
+}
+
+.device-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  margin: 0 0 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--card-background);
+  line-height: 1.25;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.device-row.unsupported {
+  opacity: 0.45;
+}
+
+.device-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(128, 128, 128, 0.18);
+}
+
+.device-row.exposed .device-icon {
+  background: var(--accent);
+  color: #fff;
+}
+
+.device-icon-mask {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: currentColor;
+  -webkit-mask: var(--icon-image) center / contain no-repeat;
+  mask: var(--icon-image) center / contain no-repeat;
+}
+
+.device-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.device-name {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+.device-zone {
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-transform: none;
+  opacity: 0.65;
+}
+
+.empty-state {
+  padding: 28px 20px;
+  border-radius: 12px;
+  background: var(--card-background);
+  text-align: center;
+}
+
+.empty-title {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.empty-text {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.65;
+}

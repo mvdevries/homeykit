@@ -11,6 +11,33 @@
       "alreadyPaired": "This bridge is already paired. You only need the code to pair again, after you have removed the bridge from the Home app.",
       "notStarted": "The bridge has not started yet.",
       "loadFailed": "Could not load the pairing details."
+    },
+    "back": "Back",
+    "menu": {
+      "devices": "Devices"
+    },
+    "devices": {
+      "title": "Devices",
+      "intro": "Choose which devices are visible in HomeKit",
+      "search": "Search",
+      "filterActive": "Active",
+      "filterInactive": "Inactive",
+      "filterUnsupported": "Not supported",
+      "noZone": "No zone",
+      "unsupported": "Not supported",
+      "noFilterTitle": "No filter selected",
+      "noFilterText": "Choose Active, Inactive or Not supported to see devices.",
+      "noResultsTitle": "No devices found",
+      "noResultsText": "Change the search term or the selected filters.",
+      "exposedCount": "__count__ of __total__ exposed",
+      "noneExposed": "No devices exposed yet",
+      "loadFailed": "Could not load devices"
+    },
+    "toast": {
+      "saving": "Saving...",
+      "saved": "Saved",
+      "saveFailed": "Saving failed",
+      "error": "Something went wrong"
     }
   }
 }
