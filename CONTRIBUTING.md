@@ -51,7 +51,7 @@ See `README.md` for running the app on a Homey.
 5. Open a pull request against `main` with a clear title (it becomes the changelog text) and a description of
    what changed and why. The pull request checks must pass.
 
-Pull requests are merged with a merge commit, not squashed.
+Pull requests are squash merged, so the title of the pull request becomes the commit message on `main`.
 
 ## Reporting security problems
 

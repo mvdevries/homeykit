@@ -15,49 +15,53 @@ concurrency:
 
 jobs:
   version:
-    name: Versie bepalen
+    name: Determine version
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.version }}
-      changelog: ${{ steps.changelog.outputs.text }}
+      version: ${{ steps.next.outputs.version }}
+      changelog: ${{ steps.pull-request.outputs.title }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
-      - name: Controleer of er een basisversie is
-        run: |
-          if ! git tag --list 'v*' | grep -q .; then
-            echo "Er is nog geen tag v<versie>. Zet eenmalig de tag van de laatst uitgebrachte versie, bijvoorbeeld: git tag v0.1.5 <commit> && git push origin v0.1.5" >&2
-            exit 1
-          fi
-      - name: Versie uit de branchnaam van de gemergede PR
-        id: version
-        uses: paulhatch/semantic-version@v6.0.7
-        with:
-          tag_prefix: "v"
-          major_pattern: "/Merge pull request #\\d+ from [^/]+\\/breaking\\//"
-          minor_pattern: "/Merge pull request #\\d+ from [^/]+\\/feature\\//"
-          version_format: "${major}.${minor}.${patch}"
-          bump_each_commit: false
-      - name: Changelogtekst uit de titel van de PR
-        id: changelog
+      - name: Find the merged pull request
+        id: pull-request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          title=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq '.[0].title // empty')
+          pull_request=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq '.[0] // {}')
+          title=$(jq -r '.title // empty' <<< "$pull_request")
+          branch=$(jq -r '.head.ref // empty' <<< "$pull_request")
           if [ -z "$title" ]; then
             title=$(git log -1 --format=%s)
           fi
-          echo "text=$title" >> "$GITHUB_OUTPUT"
-          echo "Versie ${{ steps.version.outputs.version }}: $title" >> "$GITHUB_STEP_SUMMARY"
+          case "$branch" in
+            breaking/*) increment=major ;;
+            feature/*) increment=minor ;;
+            *) increment=patch ;;
+          esac
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+          echo "increment=$increment" >> "$GITHUB_OUTPUT"
+          echo "Branch '$branch' gives a $increment version." >> "$GITHUB_STEP_SUMMARY"
+      - name: Calculate the next version
+        id: next
+        uses: reecetech/version-increment@2026.8.4
+        with:
+          scheme: semver
+          increment: ${{ steps.pull-request.outputs.increment }}
+      - name: Summary
+        run: echo "Version ${{ steps.next.outputs.version }}: ${{ steps.pull-request.outputs.title }}" >> "$GITHUB_STEP_SUMMARY"
 
   checks:
-    name: Controles
+    name: Checks
     uses: ./.github/workflows/checks.yml
+    permissions:
+      contents: read
+      pull-requests: write
 
   publish:
-    name: Uploaden naar Athom
+    name: Upload to Athom
     needs: [version, checks]
     runs-on: ubuntu-latest
     environment: production
@@ -65,7 +69,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Versie en changelog invullen
+      - uses: docker/setup-qemu-action@v3
+      - name: Fill in the version and changelog
         env:
           VERSION: ${{ needs.version.outputs.version }}
           CHANGELOG: ${{ needs.version.outputs.changelog }}
@@ -82,12 +87,12 @@ jobs:
       - uses: athombv/github-action-homey-app-validate@v1
         with:
           level: publish
-      - name: Uploaden
+      - name: Upload
         id: publish
         uses: athombv/github-action-homey-app-publish@v1
         with:
           personal_access_token: ${{ secrets.HOMEY_PAT }}
-      - name: Tag en release aanmaken
+      - name: Create tag and release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version.outputs.version }}
@@ -96,4 +101,4 @@ jobs:
         run: |
           gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" \
             --notes "$CHANGELOG"$'\n\n'"Build: $UPLOAD_URL"
-          echo "Versie $VERSION geüpload: $UPLOAD_URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version $VERSION uploaded: $UPLOAD_URL" >> "$GITHUB_STEP_SUMMARY"
