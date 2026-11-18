@@ -86,6 +86,18 @@ personal data such as device names and addresses.
 Bug reports, ideas and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Security
 problems go through [SECURITY.md](SECURITY.md).
 
+## How this was made
+
+Homeykit was built with the help of AI. Most of the code, the tests and the documentation were written by
+[Claude](https://www.anthropic.com/claude), an AI assistant from Anthropic, working under the direction of the
+maintainer. The maintainer decides what goes in, reviews the changes and is responsible for the result. The tests
+and the pipelines in this repository are there to check the work, whoever wrote it.
+
+## Trademarks
+
+Apple and HomeKit are trademarks of Apple Inc. Homeykit is an independent project and is not affiliated with or
+endorsed by Apple.
+
 ## License
 
 Homeykit is released under the [MIT License](LICENSE).

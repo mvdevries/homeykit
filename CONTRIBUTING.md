@@ -107,6 +107,12 @@ The pipeline raises the latest `v<version>` tag by that kind of version. The tit
 the squash commit title and the changelog text. The version in the manifest is replaced during the run and is
 not committed.
 
+## AI assistance
+
+This project is itself built with AI assistance (see the README). You may use AI tools for your contribution too,
+as long as you understand and have tested what you submit and it follows the rules above. You are responsible for
+your pull request, not the tool.
+
 ## Reporting security problems
 
 Please follow [SECURITY.md](SECURITY.md) and do not open a public issue.

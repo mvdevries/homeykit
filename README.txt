@@ -25,4 +25,9 @@ Good to know
 - The Home app only offers pairing when the bridge is not paired yet. To pair again, first remove the bridge from the Home app.
 - Control from outside your home network needs a home hub in your Home app (an Apple TV or HomePod).
 - If you remove the app from Homey, the pairing and your selection are removed as well, and you need to pair again.
-- This is a test version. Please report problems and ideas.
+- Problems and ideas are welcome on the GitHub page of the app (see the links of this app).
+
+Permissions
+Homeykit asks for access to the Homey API. It needs this to read your devices and their state and to control them when you use them in HomeKit. Nothing is sent outside your Homey and your local network.
+
+Apple and HomeKit are trademarks of Apple Inc. Homeykit is an independent app and is not affiliated with or endorsed by Apple.
