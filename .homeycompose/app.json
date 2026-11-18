@@ -1,6 +1,6 @@
 {
   "id": "dev.de-vries.homeykit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "compatibility": ">=13.0.0",
   "runtime": "python",
   "pythonVersion": "3.14",
