@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "loading": "Loading...",
+    "pairing": {
+      "heading": "Pair with HomeKit",
+      "paired": "Paired with HomeKit",
+      "orEnterCode": "Or enter this code",
+      "step1": "Open the Home app on your iPhone.",
+      "step2": "Tap + and choose Add Accessory.",
+      "step3": "Scan the QR code, or choose More options and enter the code.",
+      "alreadyPaired": "This bridge is already paired. You only need the code to pair again, after you have removed the bridge from the Home app.",
+      "notStarted": "The bridge has not started yet.",
+      "loadFailed": "Could not load the pairing details."
+    }
+  }
+}

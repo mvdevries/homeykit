@@ -53,6 +53,12 @@
     "email": "vriesdemartyn@gmail.com"
   },
   "support": "mailto:vriesdemartyn@gmail.com",
+  "api": {
+    "get_pairing": {
+      "method": "GET",
+      "path": "/pairing"
+    }
+  },
   "pythonPackages": [
     "HAP-python",
     "base36",

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/pairing.css" />
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  </head>
+  <body>
+    <main id="page-start" class="page">
+      <p id="start-message" class="muted" hidden></p>
+
+      <section id="pairing-section" hidden>
+        <h2 class="section-heading" data-i18n="settings.pairing.heading"></h2>
+        <div class="card card-content">
+          <p id="paired-badge" class="badge" hidden>
+            <span aria-hidden="true">&#10003;</span>
+            <span data-i18n="settings.pairing.paired"></span>
+          </p>
+          <div class="centered">
+            <div id="qr-code" class="qr-code"></div>
+          </div>
+          <div class="centered">
+            <p class="muted small" data-i18n="settings.pairing.orEnterCode"></p>
+            <p id="pincode-display" class="pincode"></p>
+          </div>
+          <p id="already-paired-text" class="muted small help-text" data-i18n="settings.pairing.alreadyPaired" hidden></p>
+          <ol id="pairing-steps" class="steps">
+            <li data-i18n="settings.pairing.step1"></li>
+            <li data-i18n="settings.pairing.step2"></li>
+            <li data-i18n="settings.pairing.step3"></li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <script type="text/javascript" src="js/translations.js"></script>
+    <script type="text/javascript" src="js/homey-api.js"></script>
+    <script type="text/javascript" src="js/pairing-page.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+  </body>
+</html>

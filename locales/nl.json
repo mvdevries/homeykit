@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "loading": "Laden...",
+    "pairing": {
+      "heading": "HomeKit koppelen",
+      "paired": "Gekoppeld aan HomeKit",
+      "orEnterCode": "Of voer deze code in",
+      "step1": "Open de Woning-app op je iPhone.",
+      "step2": "Tik op + en kies Voeg accessoire toe.",
+      "step3": "Scan de QR-code, of kies Meer opties en voer de code in.",
+      "alreadyPaired": "Deze bridge is al gekoppeld. Je hebt de code alleen nodig om opnieuw te koppelen, nadat je de bridge uit de Woning-app hebt verwijderd.",
+      "notStarted": "De bridge is nog niet gestart.",
+      "loadFailed": "Kon de koppelgegevens niet ophalen."
+    }
+  }
+}
