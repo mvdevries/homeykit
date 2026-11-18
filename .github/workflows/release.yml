@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - ".github/**"
+      - ".claude/**"
+      - "tests/**"
+      - "**.md"
+      - "LICENSE"
+      - "pyproject.toml"
+      - "uv.lock"
   workflow_dispatch:
 
 permissions:
