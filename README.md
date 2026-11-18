@@ -128,8 +128,6 @@ it as a test version afterwards is done in [tools.developer.homey.app](https://t
 
 ## Sources
 
-- The icon and brand colour were taken from HomeKitty (`name.klep.homekitty`) for private use.
-  That repository has no licence; ask the author for permission before making this public.
 - The store images and the header are made from the photo
   ["Turned on gray flat screen smart TV"](https://www.pexels.com/photo/turned-on-gray-flat-screen-smart-tv-1571459/)
   from Pexels, used under the [Pexels License](https://www.pexels.com/license/) (free for commercial use, no
