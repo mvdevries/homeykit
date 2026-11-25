@@ -12,7 +12,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ruff>=0.14.0",
+    "ruff>=0.17.6",
     "pytest>=8.3.0",
     "pytest-asyncio>=1.0.0",
     "pytest-bdd>=8.0.0",
